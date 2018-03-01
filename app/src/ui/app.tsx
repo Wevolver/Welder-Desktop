@@ -46,8 +46,7 @@ import {
   Toolbar,
   ToolbarDropdown,
   DropdownState,
-  PushPullButton,
-  BranchDropdown,
+  // PushPullButton,
   RevertProgress,
 } from './toolbar'
 import { OcticonSymbol, iconForRepository } from './octicons'
@@ -57,7 +56,7 @@ import {
   sendReady,
 } from './main-process-proxy'
 import { DiscardChanges } from './discard-changes'
-import { Welcome } from './welcome'
+// import { Welcome } from './welcome'
 import { AppMenuBar } from './app-menu'
 import { UpdateAvailable } from './updates'
 import { Preferences } from './preferences'
@@ -1428,23 +1427,23 @@ export class App extends React.Component<IAppProps, IAppState> {
       return <RevertProgress progress={revertProgress} />
     }
 
-    const remoteName = state.remote ? state.remote.name : null
-    const progress = state.pushPullFetchProgress
+    // const remoteName = state.remote ? state.remote.name : null
+    // const progress = state.pushPullFetchProgress
 
-    const tipState = state.branchesState.tip.kind
-
-    return (
-      <PushPullButton
-        dispatcher={this.props.dispatcher}
-        repository={selection.repository}
-        aheadBehind={state.aheadBehind}
-        remoteName={remoteName}
-        lastFetched={state.lastFetched}
-        networkActionInProgress={state.isPushPullFetchInProgress}
-        progress={progress}
-        tipState={tipState}
-      />
-    )
+    // const tipState = state.branchesState.tip.kind
+    return null
+    // return (
+    //   <PushPullButton
+    //     dispatcher={this.props.dispatcher}
+    //     repository={selection.repository}
+    //     aheadBehind={state.aheadBehind}
+    //     remoteName={remoteName}
+    //     lastFetched={state.lastFetched}
+    //     networkActionInProgress={state.isPushPullFetchInProgress}
+    //     progress={progress}
+    //     tipState={tipState}
+    //   />
+    // )
   }
 
   private showCreateBranch = () => {
@@ -1495,43 +1494,6 @@ export class App extends React.Component<IAppProps, IAppState> {
     this.props.dispatcher.openCreatePullRequestInBrowser(repository, branch)
   }
 
-  private onBranchDropdownStateChanged = (newState: DropdownState) => {
-    if (newState === 'open') {
-      this.props.dispatcher.showFoldout({ type: FoldoutType.Branch })
-    } else {
-      this.props.dispatcher.closeFoldout(FoldoutType.Branch)
-    }
-  }
-
-  private renderBranchToolbarButton(): JSX.Element | null {
-    const selection = this.state.selectedState
-
-    if (selection == null || selection.type !== SelectionType.Repository) {
-      return null
-    }
-
-    const currentFoldout = this.state.currentFoldout
-    const isOpen =
-      !!currentFoldout && currentFoldout.type === FoldoutType.Branch
-
-    const repository = selection.repository
-    const branchesState = selection.state.branchesState
-
-    return (
-      <BranchDropdown
-        dispatcher={this.props.dispatcher}
-        isOpen={isOpen}
-        onDropDownStateChanged={this.onBranchDropdownStateChanged}
-        repository={repository}
-        repositoryState={selection.state}
-        selectedTab={this.state.selectedBranchesTab}
-        pullRequests={branchesState.openPullRequests}
-        currentPullRequest={branchesState.currentPullRequest}
-        isLoadingPullRequests={branchesState.isLoadingPullRequests}
-      />
-    )
-  }
-
   private renderUpdateBanner() {
     if (!this.state.isUpdateAvailableBannerVisible) {
       return null
@@ -1556,7 +1518,6 @@ export class App extends React.Component<IAppProps, IAppState> {
         >
           {this.renderRepositoryToolbarButton()}
         </div>
-        {this.renderBranchToolbarButton()}
         {this.renderPushPullToolbarButton()}
       </Toolbar>
     )
@@ -1584,6 +1545,7 @@ export class App extends React.Component<IAppProps, IAppState> {
         <RepositoryView
           repository={selectedState.repository}
           state={selectedState.state}
+          appStore={this.props.appStore}
           dispatcher={this.props.dispatcher}
           emoji={this.state.emoji}
           sidebarWidth={this.state.sidebarWidth}
@@ -1617,15 +1579,15 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
   }
 
-  private renderWelcomeFlow() {
-    return (
-      <Welcome
-        dispatcher={this.props.dispatcher}
-        appStore={this.props.appStore}
-        signInState={this.state.signInState}
-      />
-    )
-  }
+  // private renderWelcomeFlow() {
+  //   return (
+  //     <Welcome
+  //       dispatcher={this.props.dispatcher}
+  //       appStore={this.props.appStore}
+  //       signInState={this.state.signInState}
+  //     />
+  //   )
+  // }
 
   public render() {
     if (this.loading) {
@@ -1634,12 +1596,14 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     const className = this.state.appIsFocused ? 'focused' : 'blurred'
 
+    // {this.state.showWelcomeFlow
+    //       ? this.renderWelcomeFlow()
+    //       : this.renderApp()}
+
     return (
       <div id="desktop-app-chrome" className={className}>
         {this.renderTitlebar()}
-        {this.state.showWelcomeFlow
-          ? this.renderWelcomeFlow()
-          : this.renderApp()}
+        {this.renderApp()}
         {this.renderZoomInfo()}
         {this.renderFullScreenInfo()}
       </div>

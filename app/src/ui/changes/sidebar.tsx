@@ -23,7 +23,7 @@ import { CSSTransitionGroup } from 'react-transition-group'
 import { openFile } from '../../lib/open-file'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { Account } from '../../models/account'
-
+import { AppStore } from '../../lib/stores'
 /**
  * The timeout for the animation of the enter/leave animation for Undo.
  *
@@ -43,6 +43,7 @@ interface IChangesSidebarProps {
   readonly mostRecentLocalCommit: Commit | null
   readonly issuesStore: IssuesStore
   readonly availableWidth: number
+  readonly appStore: AppStore
   readonly isCommitting: boolean
   readonly isPushPullFetchInProgress: boolean
   readonly gitHubUserStore: GitHubUserStore
@@ -282,6 +283,7 @@ export class ChangesSidebar extends React.Component<IChangesSidebarProps, {}> {
       <div id="changes-sidebar-contents">
         <ChangesList
           dispatcher={this.props.dispatcher}
+          appStore={this.props.appStore}
           repository={this.props.repository}
           workingDirectory={changesState.workingDirectory}
           selectedFileID={selectedFileID}

@@ -6,6 +6,7 @@ import {
   IAutocompletionProvider,
   UserAutocompletionProvider,
 } from '../autocompletion'
+import { PushPullButton } from '../toolbar'
 import { CommitIdentity } from '../../models/commit-identity'
 import { ICommitMessage } from '../../lib/app-state'
 import { Dispatcher } from '../../lib/dispatcher'
@@ -22,6 +23,8 @@ import { showContextualMenu, IMenuItem } from '../main-process-proxy'
 import { Octicon, OcticonSymbol } from '../octicons'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { IAuthor } from '../../models/author'
+import { AppStore } from '../../lib/stores'
+import { SelectionType } from '../../lib/app-state'
 
 const addAuthorIcon = new OcticonSymbol(
   12,
@@ -38,6 +41,7 @@ interface ICommitMessageProps {
     description: string | null,
     trailers?: ReadonlyArray<ITrailer>
   ) => Promise<boolean>
+  readonly appStore: AppStore
   readonly branch: string | null
   readonly commitAuthor: CommitIdentity | null
   readonly gitHubUser: IGitHubUser | null
@@ -446,6 +450,37 @@ export class CommitMessage extends React.Component<
     return <div className={className}>{this.renderCoAuthorToggleButton()}</div>
   }
 
+  private renderPushPullToolbarButton() {
+    const selection = this.props.appStore.getState().selectedState
+    // const selection = this.state.selectedState
+    if (!selection || selection.type !== SelectionType.Repository) {
+      return null
+    }   
+
+    const state = selection.state
+    // const revertProgress = state.revertProgress
+    // if (revertProgress) {
+    //   return <RevertProgress progress={revertProgress} />
+    // }
+
+    const remoteName = state.remote ? state.remote.name : null
+    const progress = state.pushPullFetchProgress
+
+    const tipState = state.branchesState.tip.kind
+    return (
+      <PushPullButton
+        dispatcher={this.props.dispatcher}
+        repository={selection.repository}
+        aheadBehind={state.aheadBehind}
+        remoteName={remoteName}
+        lastFetched={state.lastFetched}
+        networkActionInProgress={state.isPushPullFetchInProgress}
+        progress={progress}
+        tipState={tipState}
+      />
+    )
+  }
+
   public render() {
     const branchName = this.props.branch ? this.props.branch : 'master'
     const buttonEnabled = this.canCommit() && !this.props.isCommitting
@@ -500,7 +535,7 @@ export class CommitMessage extends React.Component<
         </FocusContainer>
 
         {this.renderCoAuthorInput()}
-
+        {this.renderPushPullToolbarButton()}
         <Button
           type="submit"
           className="commit-button"

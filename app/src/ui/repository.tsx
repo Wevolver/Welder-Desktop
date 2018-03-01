@@ -14,10 +14,11 @@ import {
   ImageDiffType,
 } from '../lib/app-state'
 import { Dispatcher } from '../lib/dispatcher'
-import { IssuesStore, GitHubUserStore } from '../lib/stores'
+import { IssuesStore, GitHubUserStore, AppStore } from '../lib/stores'
 import { assertNever } from '../lib/fatal-error'
 import { Octicon, OcticonSymbol } from './octicons'
 import { Account } from '../models/account'
+
 
 /** The widest the sidebar can be with the minimum window size. */
 const MaxSidebarWidth = 495
@@ -30,6 +31,7 @@ interface IRepositoryProps {
   readonly sidebarWidth: number
   readonly commitSummaryWidth: number
   readonly issuesStore: IssuesStore
+  readonly appStore: AppStore
   readonly gitHubUserStore: GitHubUserStore
   readonly onViewCommitOnGitHub: (SHA: string) => void
   readonly imageDiffType: ImageDiffType
@@ -87,6 +89,7 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
         repository={this.props.repository}
         dispatcher={this.props.dispatcher}
         changes={this.props.state.changesState}
+        appStore={this.props.appStore}
         branch={branch ? branch.name : null}
         commitAuthor={this.props.state.commitAuthor}
         gitHubUsers={this.props.state.gitHubUsers}
