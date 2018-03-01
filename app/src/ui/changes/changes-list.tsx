@@ -18,6 +18,7 @@ import { Repository } from '../../models/repository'
 import { showContextualMenu, IMenuItem } from '../main-process-proxy'
 import { IAuthor } from '../../models/author'
 import { ITrailer } from '../../lib/git/interpret-trailers'
+import { AppStore } from '../../lib/stores'
 
 const RowHeight = 29
 
@@ -33,6 +34,7 @@ interface IChangesListProps {
     description: string | null,
     trailers?: ReadonlyArray<ITrailer>
   ) => Promise<boolean>
+  readonly appStore: AppStore
   readonly onDiscardChanges: (file: WorkingDirectoryFileChange) => void
   readonly onDiscardAllChanges: (
     files: ReadonlyArray<WorkingDirectoryFileChange>
@@ -194,6 +196,7 @@ export class ChangesList extends React.Component<IChangesListProps, {}> {
         <CommitMessage
           onCreateCommit={this.props.onCreateCommit}
           branch={this.props.branch}
+          appStore={this.props.appStore}
           gitHubUser={this.props.gitHubUser}
           commitAuthor={this.props.commitAuthor}
           anyFilesSelected={anyFilesSelected}
