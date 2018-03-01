@@ -1,26 +1,18 @@
 import * as React from 'react'
-import { Commit } from '../../models/commit'
 import { lookupPreferredEmail } from '../../lib/email'
 import {
   getGlobalConfigValue,
   setGlobalConfigValue,
 } from '../../lib/git/config'
-import { CommitListItem } from '../history/commit-list-item'
 import { Account } from '../../models/account'
-import { CommitIdentity } from '../../models/commit-identity'
 import { Form } from '../lib/form'
 import { Button } from '../lib/button'
 import { TextBox } from '../lib/text-box'
 import { Row } from '../lib/row'
 
 interface IConfigureGitUserProps {
-  /** The logged-in accounts. */
   readonly accounts: ReadonlyArray<Account>
-
-  /** Called after the user has chosen to save their config. */
   readonly onSave?: () => void
-
-  /** The label for the button which saves config changes. */
   readonly saveLabel?: string
 }
 
@@ -30,18 +22,12 @@ interface IConfigureGitUserState {
   readonly avatarURL: string | null
 }
 
-/**
- * A component which allows the user to configure their Git user.
- *
- * Provide `children` elements which will be rendered below the form.
- */
 export class ConfigureGitUser extends React.Component<
   IConfigureGitUserProps,
   IConfigureGitUserState
 > {
   public constructor(props: IConfigureGitUserProps) {
     super(props)
-
     this.state = { name: '', email: '', avatarURL: null }
   }
 
@@ -65,34 +51,7 @@ export class ConfigureGitUser extends React.Component<
     this.setState({ name: name || '', email: email || '', avatarURL })
   }
 
-  private dateWithMinuteOffset(date: Date, minuteOffset: number): Date {
-    const copy = new Date(date.getTime())
-    copy.setTime(copy.getTime() + minuteOffset * 60 * 1000)
-    return copy
-  }
-
   public render() {
-    const now = new Date()
-
-    // NB: We're using the name as the commit SHA:
-    //  1. `Commit` is referentially transparent wrt the SHA. So in order to get
-    //     it to update when we name changes, we need to change the SHA.
-    //  2. We don't display the SHA so the user won't ever know our secret.
-    const author = new CommitIdentity(
-      this.state.name,
-      this.state.email,
-      this.dateWithMinuteOffset(now, -30)
-    )
-    const dummyCommit = new Commit(
-      this.state.name,
-      'Fix all the things',
-      '',
-      author,
-      author,
-      [],
-      []
-    )
-    const emoji = new Map()
     return (
       <div id="configure-git-user">
         <Form className="sign-in-form" onSubmit={this.save}>
@@ -115,18 +74,6 @@ export class ConfigureGitUser extends React.Component<
             {this.props.children}
           </Row>
         </Form>
-
-        <div id="commit-list" className="commit-list-example">
-          <div className="header">Example commit</div>
-
-          <CommitListItem
-            commit={dummyCommit}
-            emoji={emoji}
-            gitHubUsers={null}
-            gitHubRepository={null}
-            isLocal={false}
-          />
-        </div>
       </div>
     )
   }

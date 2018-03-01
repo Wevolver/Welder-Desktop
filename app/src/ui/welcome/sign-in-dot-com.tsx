@@ -36,6 +36,6 @@ export class SignInDotCom extends React.Component<ISignInDotComProps, {}> {
   }
 
   private cancel = () => {
-    this.props.advance(WelcomeStep.Start)
+    // this.props.advance(WelcomeStep.Start)
   }
 }
