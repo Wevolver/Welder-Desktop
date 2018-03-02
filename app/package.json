@@ -7,13 +7,13 @@
   "main": "./main.js",
   "repository": {
     "type": "git",
-    "url": "https://wevolver.com/Desktop2"
+    "url": "https://github.com/wevolver/desktop2.git"
   },
   "description": "Simple collaboration from your desktop",
   "author": {
-    "name": "Wevolver, Inc.",
+    "name": "Wevolver",
     "email": "info@wevolver.com",
-    "url": "https://www.wevolver.com"
+    "url": "https://wevolver.com/"
   },
   "license": "MIT",
   "dependencies": {

@@ -67,7 +67,7 @@ export function buildDefaultMenu(
     submenu: [
       separator,
       {
-        label: __DARWIN__ ? 'Clone Repository…' : 'Clo&ne repository…',
+        label: __DARWIN__ ? 'Clone Project…' : 'Clo&ne project…',
         id: 'clone-repository',
         accelerator: 'CmdOrCtrl+Shift+O',
         click: emit('clone-repository'),
@@ -122,7 +122,7 @@ export function buildDefaultMenu(
         click: emit('select-history'),
       },
       {
-        label: __DARWIN__ ? 'Show Repository List' : 'Repository &list',
+        label: __DARWIN__ ? 'Show Project List' : 'Project &list',
         id: 'show-repository-list',
         accelerator: 'CmdOrCtrl+T',
         click: emit('choose-repository'),
@@ -183,7 +183,7 @@ export function buildDefaultMenu(
   })
 
   template.push({
-    label: __DARWIN__ ? 'Repository' : '&Repository',
+    label: __DARWIN__ ? 'Project' : '&Project',
     id: 'repository',
     submenu: [
       separator,
@@ -207,7 +207,7 @@ export function buildDefaultMenu(
       },
       separator,
       {
-        label: __DARWIN__ ? 'Repository Settings…' : 'Repository &settings…',
+        label: __DARWIN__ ? 'Project Settings…' : 'Project &settings…',
         id: 'show-repository-settings',
         click: emit('show-repository-settings'),
       },

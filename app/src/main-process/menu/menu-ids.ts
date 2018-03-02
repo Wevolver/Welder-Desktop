@@ -8,6 +8,5 @@ export type MenuIDs =
   | 'show-repository-list'
   | 'open-working-directory'
   | 'show-repository-settings'
-  | 'open-external-editor'
   | 'clone-repository'
   | 'about'

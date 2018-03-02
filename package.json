@@ -1,9 +1,9 @@
 {
   "repository": {
     "type": "git",
-    "url": "https://github.com/desktop/desktop.git"
+    "url": "https://github.com/wevolver/desktop2.git"
   },
-  "description": "GitHub Desktop build dependencies",
+  "description": "Wevolver Desktop",
   "scripts": {
     "cli": "ts-node --require ./app/test/globals.ts --require ./app/src/cli/dev-commands-global.js app/src/cli/main.ts",
     "test:integration": "cross-env TEST_ENV=1 ELECTRON_NO_ATTACH_CONSOLE=1 xvfb-maybe mocha -t 30000 --require ts-node/register app/test/integration/*.ts",
@@ -40,9 +40,9 @@
     "draft-release": "ts-node script/draft-release/index.ts"
   },
   "author": {
-    "name": "GitHub, Inc.",
-    "email": "opensource+desktop@github.com",
-    "url": "https://desktop.github.com/"
+    "name": "Wevolver",
+    "email": "info@wevolver.com",
+    "url": "https://wevolver.com/"
   },
   "license": "MIT",
   "engines": {

@@ -3,7 +3,7 @@ import { Account } from '../../models/account'
 import { PreferencesTab } from '../../models/preferences'
 import { ExternalEditor } from '../../lib/editors'
 import { Dispatcher } from '../../lib/dispatcher'
-import { TabBar } from '../tab-bar'
+// import { TabBar } from '../tab-bar'
 import { Accounts } from './accounts'
 import { Advanced } from './advanced'
 import { Git } from './git'
@@ -59,7 +59,7 @@ export class Preferences extends React.Component<
     super(props)
 
     this.state = {
-      selectedIndex: this.props.initialSelectedTab || PreferencesTab.Accounts,
+      selectedIndex: PreferencesTab.Git,
       committerName: '',
       committerEmail: '',
       disallowedCharactersMessage: null,
@@ -128,15 +128,6 @@ export class Preferences extends React.Component<
         onSubmit={this.onSave}
       >
         {this.renderDisallowedCharactersError()}
-        <TabBar
-          onTabClicked={this.onTabClicked}
-          selectedIndex={this.state.selectedIndex}
-        >
-          <span>Accounts</span>
-          <span>Git</span>
-          <span>Advanced</span>
-        </TabBar>
-
         {this.renderActiveTab()}
         {this.renderFooter()}
       </Dialog>
@@ -327,9 +318,9 @@ export class Preferences extends React.Component<
     this.props.onDismissed()
   }
 
-  private onTabClicked = (index: number) => {
-    this.setState({ selectedIndex: index })
-  }
+  // private onTabClicked = (index: number) => {
+  //   this.setState({ selectedIndex: index })
+  // }
 
   private onMergeToolNameChanged = (name: string) => {
     const mergeTool = {

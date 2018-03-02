@@ -758,15 +758,16 @@ export class App extends React.Component<IAppProps, IAppState> {
   private getCurrentRepositoryGitHubURL() {
     const repository = this.getRepository()
 
-    if (
-      !repository ||
-      repository instanceof CloningRepository ||
-      !repository.gitHubRepository
-    ) {
+    console.log(repository)
+    // if (
+    //   !repository ||
+    //   repository instanceof CloningRepository ||
+    //   !repository.gitHubRepository
+    // ) {
       return null
-    }
+    // }
 
-    return repository.gitHubRepository.htmlURL
+    // return repository.gitHubRepository.htmlURL
   }
 
   private openCurrentRepositoryInShell() {
