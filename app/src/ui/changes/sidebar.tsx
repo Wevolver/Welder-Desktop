@@ -10,7 +10,6 @@ import { IGitHubUser } from '../../lib/databases'
 import { IssuesStore, GitHubUserStore } from '../../lib/stores'
 import { CommitIdentity } from '../../models/commit-identity'
 import { Commit } from '../../models/commit'
-import { UndoCommit } from './undo-commit'
 import {
   IAutocompletionProvider,
   EmojiAutocompletionProvider,
@@ -19,18 +18,10 @@ import {
 } from '../autocompletion'
 import { ClickSource } from '../lib/list'
 import { WorkingDirectoryFileChange } from '../../models/status'
-import { CSSTransitionGroup } from 'react-transition-group'
 import { openFile } from '../../lib/open-file'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { Account } from '../../models/account'
 import { AppStore } from '../../lib/stores'
-/**
- * The timeout for the animation of the enter/leave animation for Undo.
- *
- * Note that this *must* match the duration specified for the `undo` transitions
- * in `_changes-list.scss`.
- */
-const UndoCommitAnimationTimeout = 500
 
 interface IChangesSidebarProps {
   readonly repository: Repository
@@ -230,49 +221,10 @@ export class ChangesSidebar extends React.Component<IChangesSidebarProps, {}> {
     }
   }
 
-  private onUndo = () => {
-    const commit = this.props.mostRecentLocalCommit
-
-    if (commit) {
-      this.props.dispatcher.undoCommit(this.props.repository, commit)
-    }
-  }
-
-  private renderMostRecentLocalCommit() {
-    const commit = this.props.mostRecentLocalCommit
-    let child: JSX.Element | null = null
-    if (commit) {
-      child = (
-        <UndoCommit
-          isPushPullFetchInProgress={this.props.isPushPullFetchInProgress}
-          commit={commit}
-          onUndo={this.onUndo}
-          emoji={this.props.emoji}
-        />
-      )
-    }
-
-    return (
-      <CSSTransitionGroup
-        transitionName="undo"
-        transitionAppear={true}
-        transitionAppearTimeout={UndoCommitAnimationTimeout}
-        transitionEnterTimeout={UndoCommitAnimationTimeout}
-        transitionLeaveTimeout={UndoCommitAnimationTimeout}
-      >
-        {child}
-      </CSSTransitionGroup>
-    )
-  }
-
   public render() {
     const changesState = this.props.changes
     const selectedFileID = changesState.selectedFileID
 
-    // TODO: I think user will expect the avatar to match that which
-    // they have configured in GitHub.com as well as GHE so when we add
-    // support for GHE we should revisit this and try to update the logic
-    // to look up based on email _and_ host.
     const email = this.props.commitAuthor ? this.props.commitAuthor.email : null
     let user: IGitHubUser | null = null
     if (email) {
@@ -308,7 +260,6 @@ export class ChangesSidebar extends React.Component<IChangesSidebarProps, {}> {
           showCoAuthoredBy={this.props.changes.showCoAuthoredBy}
           coAuthors={this.props.changes.coAuthors}
         />
-        {this.renderMostRecentLocalCommit()}
       </div>
     )
   }

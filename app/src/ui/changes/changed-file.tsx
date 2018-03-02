@@ -1,15 +1,10 @@
 import * as React from 'react'
-import * as Path from 'path'
 
 import { AppFileStatus, mapStatus, iconForStatus } from '../../models/status'
 import { PathLabel } from '../lib/path-label'
 import { Octicon } from '../octicons'
 import { showContextualMenu, IMenuItem } from '../main-process-proxy'
 import { Checkbox, CheckboxValue } from '../lib/checkbox'
-
-const GitIgnoreFileName = '.gitignore'
-
-const RestrictedFileExtensions = ['.cmd', '.exe', '.bat', '.sh']
 
 interface IChangedFileProps {
   readonly path: string
@@ -70,9 +65,6 @@ export class ChangedFile extends React.Component<IChangedFileProps, {}> {
     return (
       <div className="file" onContextMenu={this.onContextMenu}>
         <Checkbox
-          // The checkbox doesn't need to be tab reachable since we emulate
-          // checkbox behavior on the list item itself, ie hitting space bar
-          // while focused on a row will toggle selection.
           tabIndex={-1}
           value={this.checkboxValue}
           onChange={this.handleCheckboxChange}
@@ -97,34 +89,13 @@ export class ChangedFile extends React.Component<IChangedFileProps, {}> {
   private onContextMenu = (event: React.MouseEvent<any>) => {
     event.preventDefault()
 
-    const extension = Path.extname(this.props.path)
-    const fileName = Path.basename(this.props.path)
     const items: IMenuItem[] = [
       {
         label: __DARWIN__ ? 'Discard Changes…' : 'Discard changes…',
         action: () => this.props.onDiscardChanges(this.props.path),
       },
-      { type: 'separator' },
-      {
-        label: 'Ignore',
-        action: () => this.props.onIgnore(this.props.path),
-        enabled: fileName !== GitIgnoreFileName,
-      },
+      { type: 'separator' }
     ]
-
-    if (extension.length) {
-      items.push({
-        label: __DARWIN__
-          ? `Ignore All ${extension} Files`
-          : `Ignore all ${extension} files`,
-        action: () => this.props.onIgnore(`*${extension}`),
-        enabled: fileName !== GitIgnoreFileName,
-      })
-    }
-
-    const isSafeExtension = __WIN32__
-      ? RestrictedFileExtensions.indexOf(extension.toLowerCase()) === -1
-      : true
 
     const revealInFileManagerLabel = __DARWIN__
       ? 'Reveal in Finder'
@@ -136,13 +107,6 @@ export class ChangedFile extends React.Component<IChangedFileProps, {}> {
         label: revealInFileManagerLabel,
         action: () => this.props.onRevealInFileManager(this.props.path),
         enabled: this.props.status !== AppFileStatus.Deleted,
-      },
-      {
-        label: __DARWIN__
-          ? 'Open with Default Program'
-          : 'Open with default program',
-        action: () => this.props.onOpenItem(this.props.path),
-        enabled: isSafeExtension && this.props.status !== AppFileStatus.Deleted,
       }
     )
 
