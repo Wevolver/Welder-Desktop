@@ -128,7 +128,7 @@ function getReleaseSHA() {
 }
 
 function getUpdatesURL() {
-  return `https://hazel-uczitrumes.now.sh/update/${process.platform}/${version}`
+  return `https://hazel-aaqfvwpujm.now.sh/update/${process.platform}/${version}`
 }
 
 function shouldMakeDelta() {

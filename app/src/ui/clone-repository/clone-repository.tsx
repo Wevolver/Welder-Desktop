@@ -12,14 +12,12 @@ import {
 } from '../../lib/remote-parsing'
 import { findAccountForRemoteURL } from '../../lib/find-account'
 import { API } from '../../lib/api'
-import { Dialog, DialogError, DialogFooter, DialogContent } from '../dialog'
+import { Dialog, DialogError, DialogFooter } from '../dialog'
 import { TabBar } from '../tab-bar'
 import { CloneRepositoryTab } from '../../models/clone-repository-tab'
 import { CloneGenericRepository } from './clone-generic-repository'
-import { CloneGithubRepository } from './clone-github-repository'
+// import { CloneGithubRepository } from './clone-github-repository'
 import { pathExists } from '../../lib/file-system'
-import { assertNever } from '../../lib/fatal-error'
-import { CallToAction } from '../lib/call-to-action'
 
 /** The name for the error when the destination already exists. */
 const DestinationExistsErrorName = 'DestinationExistsError'
@@ -102,19 +100,19 @@ export class CloneRepository extends React.Component<
     return (
       <Dialog
         className="clone-repository"
-        title={__DARWIN__ ? 'Clone a Repository' : 'Clone a repository'}
+        title={__DARWIN__ ? 'Clone a Project' : 'Clone a Project'}
         onSubmit={this.clone}
         onDismissed={this.props.onDismissed}
         loading={this.state.loading}
       >
-        <TabBar
+        {false && <TabBar
           onTabClicked={this.onTabClicked}
           selectedIndex={this.props.selectedTab}
         >
           <span>GitHub.com</span>
           <span>Enterprise</span>
           <span>URL</span>
-        </TabBar>
+        </TabBar>}
 
         {error ? <DialogError>{error.message}</DialogError> : null}
 
@@ -158,42 +156,20 @@ export class CloneRepository extends React.Component<
   }
 
   private renderActiveTab() {
-    const tab = this.props.selectedTab
+    // const tab = this.props.selectedTab
 
-    switch (tab) {
-      case CloneRepositoryTab.Generic:
-        return (
-          <CloneGenericRepository
-            path={this.state.path}
-            url={this.state.url}
-            onPathChanged={this.updateAndValidatePath}
-            onUrlChanged={this.updateUrl}
-            onChooseDirectory={this.onChooseDirectory}
-          />
-        )
+    return (
+      <CloneGenericRepository
+        path={this.state.path}
+        url={this.state.url}
+        onPathChanged={this.updateAndValidatePath}
+        onUrlChanged={this.updateUrl}
+        onChooseDirectory={this.onChooseDirectory}
+      />
+    )
 
-      case CloneRepositoryTab.DotCom:
-      case CloneRepositoryTab.Enterprise: {
-        const account = this.getAccountForTab(tab)
-        if (!account) {
-          return <DialogContent>{this.renderSignIn(tab)}</DialogContent>
-        } else {
-          return (
-            <CloneGithubRepository
-              path={this.state.path}
-              account={account}
-              onPathChanged={this.updateAndValidatePath}
-              onGitHubRepositorySelected={this.updateUrl}
-              onChooseDirectory={this.onChooseDirectory}
-              onDismissed={this.props.onDismissed}
-              shouldClearFilter={this.state.shouldClearFilter}
-            />
-          )
-        }
-      }
-    }
 
-    return assertNever(tab, `Unknown tab: ${tab}`)
+    // return assertNever(tab, `Unknown tab: ${tab}`)
   }
 
   private getAccountForTab(tab: CloneRepositoryTab): Account | null {
@@ -205,44 +181,6 @@ export class CloneRepository extends React.Component<
       default:
         return null
     }
-  }
-
-  private renderSignIn(tab: CloneRepositoryTab) {
-    const signInTitle = __DARWIN__ ? 'Sign In' : 'Sign in'
-    switch (tab) {
-      case CloneRepositoryTab.DotCom:
-        return (
-          <CallToAction actionTitle={signInTitle} onAction={this.signInDotCom}>
-            <div>
-              Sign in to your GitHub.com account to access your repositories.
-            </div>
-          </CallToAction>
-        )
-      case CloneRepositoryTab.Enterprise:
-        return (
-          <CallToAction
-            actionTitle={signInTitle}
-            onAction={this.signInEnterprise}
-          >
-            <div>
-              If you have a GitHub Enterprise account at work, sign in to it to
-              get access to your repositories.
-            </div>
-          </CallToAction>
-        )
-      case CloneRepositoryTab.Generic:
-        return null
-      default:
-        return assertNever(tab, `Unknown sign in tab: ${tab}`)
-    }
-  }
-
-  private signInDotCom = () => {
-    this.props.dispatcher.showDotComSignInDialog()
-  }
-
-  private signInEnterprise = () => {
-    this.props.dispatcher.showEnterpriseSignInDialog()
   }
 
   private updateAndValidatePath = async (path: string) => {

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { clipboard } from 'electron'
 
 import { Row } from '../lib/row'
 import { Button } from '../lib/button'
@@ -43,8 +42,6 @@ interface IAboutState {
   readonly updateState: IUpdateState
 }
 
-const releaseNotesUri = 'https://desktop.github.com/release-notes/'
-
 /**
  * A dialog that presents information about the
  * running application such as name and version.
@@ -67,10 +64,6 @@ export class About extends React.Component<IAboutProps, IAboutState> {
 
   private onUpdateStateChanged = (updateState: IUpdateState) => {
     this.setState({ updateState })
-  }
-
-  private onClickVersion = () => {
-    clipboard.writeText(this.props.applicationVersion)
   }
 
   public componentDidMount() {
@@ -245,9 +238,6 @@ export class About extends React.Component<IAboutProps, IAboutState> {
   public render() {
     const name = this.props.applicationName
     const version = this.props.applicationVersion
-    const releaseNotesLink = (
-      <LinkButton uri={releaseNotesUri}>release notes</LinkButton>
-    )
 
     return (
       <Dialog
@@ -257,30 +247,23 @@ export class About extends React.Component<IAboutProps, IAboutState> {
       >
         {this.renderUpdateErrors()}
         <DialogContent>
-          <Row className="logo">
+          {false && <Row className="logo">
             <Octicon symbol={OcticonSymbol.markGithub} />
-          </Row>
+          </Row>}
           <h2>{name}</h2>
           <p className="no-padding">
-            <LinkButton
-              title="Click to copy"
-              className="version-text"
-              onClick={this.onClickVersion}
-            >
-              Version {version}
-            </LinkButton>{' '}
-            ({releaseNotesLink})
+            Version {version}
           </p>
-          <p className="no-padding">
+          {false && <p className="no-padding">
             <LinkButton onClick={this.props.onShowTermsAndConditions}>
               Terms and Conditions
             </LinkButton>
-          </p>
-          <p>
+          </p>}
+          {false && <p>
             <LinkButton onClick={this.props.onShowAcknowledgements}>
               License and Open Source Notices
             </LinkButton>
-          </p>
+          </p>}
           {this.renderUpdateDetails()}
           {this.renderUpdateButton()}
         </DialogContent>

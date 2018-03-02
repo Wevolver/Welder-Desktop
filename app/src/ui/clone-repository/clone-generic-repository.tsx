@@ -3,7 +3,6 @@ import { TextBox } from '../lib/text-box'
 import { Button } from '../lib/button'
 import { Row } from '../lib/row'
 import { DialogContent } from '../dialog'
-import { Ref } from '../lib/ref'
 
 interface ICloneGenericRepositoryProps {
   /** The URL to clone. */
@@ -40,9 +39,7 @@ export class CloneGenericRepository extends React.Component<
             autoFocus={true}
             label={
               <span>
-                Repository URL or GitHub username and repository
-                <br />
-                (<Ref>hubot/cool-repo</Ref>)
+                Project URL
               </span>
             }
           />
