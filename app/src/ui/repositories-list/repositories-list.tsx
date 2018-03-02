@@ -164,7 +164,7 @@ export class RepositoriesList extends React.Component<
     return (
       <div className="repository-list">
         <div className="filter-list">
-          <div className="sidebar-message">No repositories</div>
+          <div className="sidebar-message">No projects</div>
         </div>
       </div>
     )

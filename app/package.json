@@ -1,19 +1,19 @@
 {
   "name": "desktop",
-  "productName": "GitHub Desktop",
+  "productName": "Wevolver Desktop",
   "bundleID": "com.github.GitHubClient",
-  "companyName": "GitHub, Inc.",
+  "companyName": "Wevolver, Inc.",
   "version": "1.1.1-beta1",
   "main": "./main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/desktop/desktop.git"
+    "url": "https://github.com/wevolver/desktop2.git"
   },
   "description": "Simple collaboration from your desktop",
   "author": {
-    "name": "GitHub, Inc.",
-    "email": "opensource+desktop@github.com",
-    "url": "https://desktop.github.com/"
+    "name": "Wevolver",
+    "email": "info@wevolver.com",
+    "url": "https://wevolver.com/"
   },
   "license": "MIT",
   "dependencies": {
