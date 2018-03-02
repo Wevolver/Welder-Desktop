@@ -1397,7 +1397,7 @@ export class App extends React.Component<IAppProps, IAppState> {
     const foldoutStyle: React.CSSProperties = {
       position: 'absolute',
       marginLeft: 0,
-      minWidth: this.state.sidebarWidth,
+      minWidth: '100%',//this.state.sidebarWidth,
       height: '100%',
       top: 0,
     }
@@ -1514,7 +1514,7 @@ export class App extends React.Component<IAppProps, IAppState> {
       <Toolbar id="desktop-app-toolbar">
         <div
           className="sidebar-section"
-          style={{ width: this.state.sidebarWidth }}
+          style={{ width: '100%' }}
         >
           {this.renderRepositoryToolbarButton()}
         </div>

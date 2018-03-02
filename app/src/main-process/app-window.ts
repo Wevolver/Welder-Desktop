@@ -18,7 +18,7 @@ export class AppWindow {
   private _loadTime: number | null = null
   private _rendererReadyTime: number | null = null
 
-  private minWidth = 960
+  private minWidth = 490
   private minHeight = 660
 
   public constructor() {

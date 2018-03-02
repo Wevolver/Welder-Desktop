@@ -6,7 +6,7 @@ import { UiView } from './ui-view'
 import { Changes, ChangesSidebar } from './changes'
 import { NoChanges } from './changes/no-changes'
 import { History, HistorySidebar } from './history'
-import { Resizable } from './resizable'
+// import { Resizable } from './resizable'
 import { TabBar } from './tab-bar'
 import {
   IRepositoryState as IRepositoryModelState,
@@ -21,7 +21,7 @@ import { Account } from '../models/account'
 
 
 /** The widest the sidebar can be with the minimum window size. */
-const MaxSidebarWidth = 495
+// const MaxSidebarWidth = 495
 
 interface IRepositoryProps {
   readonly repository: Repo
@@ -136,26 +136,27 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
     }
   }
 
-  private handleSidebarWidthReset = () => {
-    this.props.dispatcher.resetSidebarWidth()
-  }
+  // private handleSidebarWidthReset = () => {
+  //   this.props.dispatcher.resetSidebarWidth()
+  // }
 
-  private handleSidebarResize = (width: number) => {
-    this.props.dispatcher.setSidebarWidth(width)
-  }
+  // private handleSidebarResize = (width: number) => {
+  //   // this.props.dispatcher.setSidebarWidth(width)
+  // }
 
   private renderSidebar(): JSX.Element {
     return (
-      <Resizable
-        id="repository-sidebar"
-        width={this.props.sidebarWidth}
-        onReset={this.handleSidebarWidthReset}
-        onResize={this.handleSidebarResize}
-        maximumWidth={MaxSidebarWidth}
-      >
+      // <Resizable
+      //   id="repository-sidebar"
+      //   width={this.props.sidebarWidth}
+      //   onReset={this.handleSidebarWidthReset}
+      //   onResize={this.handleSidebarResize}
+      //   maximumWidth={MaxSidebarWidth}
+      // >
+      <UiView id="sidebar">
         {this.renderTabs()}
         {this.renderSidebarContents()}
-      </Resizable>
+      </UiView>
     )
   }
 
@@ -208,7 +209,7 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
     return (
       <UiView id="repository" onKeyDown={this.onKeyDown}>
         {this.renderSidebar()}
-        {this.renderContent()}
+        {false && this.renderContent()}
       </UiView>
     )
   }
