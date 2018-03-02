@@ -13,27 +13,19 @@ import { Dispatcher } from '../../lib/dispatcher'
 import { IGitHubUser } from '../../lib/databases/github-user-database'
 import { Repository } from '../../models/repository'
 import { Button } from '../lib/button'
-import { Avatar } from '../lib/avatar'
+// import { Avatar } from '../lib/avatar'
 import { Loading } from '../lib/loading'
 import { structuralEquals } from '../../lib/equality'
-import { generateGravatarUrl } from '../../lib/gravatar'
+// import { generateGravatarUrl } from '../../lib/gravatar'
 import { AuthorInput } from '../lib/author-input'
 import { FocusContainer } from '../lib/focus-container'
 import { showContextualMenu, IMenuItem } from '../main-process-proxy'
-import { Octicon, OcticonSymbol } from '../octicons'
+// import { Octicon, OcticonSymbol } from '../octicons'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { IAuthor } from '../../models/author'
 import { AppStore } from '../../lib/stores'
 import { SelectionType } from '../../lib/app-state'
 
-const addAuthorIcon = new OcticonSymbol(
-  12,
-  7,
-  'M9.875 2.125H12v1.75H9.875V6h-1.75V3.875H6v-1.75h2.125V0h1.75v2.125zM6 ' +
-    '6.5a.5.5 0 0 1-.5.5h-5a.5.5 0 0 1-.5-.5V6c0-1.316 2-2 2-2s.114-.204 ' +
-    '0-.5c-.42-.31-.472-.795-.5-2C1.587.293 2.434 0 3 0s1.413.293 1.5 1.5c-.028 ' +
-    '1.205-.08 1.69-.5 2-.114.295 0 .5 0 .5s2 .684 2 2v.5z'
-)
 
 interface ICommitMessageProps {
   readonly onCreateCommit: (
@@ -282,27 +274,27 @@ export class CommitMessage extends React.Component<
     }
   }
 
-  private renderAvatar() {
-    const commitAuthor = this.props.commitAuthor
-    const avatarTitle = commitAuthor
-      ? `Committing as ${commitAuthor.name} <${commitAuthor.email}>`
-      : undefined
-    let avatarUser = undefined
-
-    if (commitAuthor) {
-      const avatarURL = this.props.gitHubUser
-        ? this.props.gitHubUser.avatarURL
-        : generateGravatarUrl(commitAuthor.email)
-
-      avatarUser = {
-        email: commitAuthor.email,
-        name: commitAuthor.name,
-        avatarURL,
-      }
-    }
-
-    return <Avatar user={avatarUser} title={avatarTitle} />
-  }
+  // private renderAvatar() {
+  //   const commitAuthor = this.props.commitAuthor
+  //   const avatarTitle = commitAuthor
+  //     ? `Committing as ${commitAuthor.name} <${commitAuthor.email}>`
+  //     : undefined
+  //   let avatarUser = undefined
+  //
+  //   if (commitAuthor) {
+  //     const avatarURL = this.props.gitHubUser
+  //       ? this.props.gitHubUser.avatarURL
+  //       : generateGravatarUrl(commitAuthor.email)
+  //
+  //     avatarUser = {
+  //       email: commitAuthor.email,
+  //       name: commitAuthor.name,
+  //       avatarURL,
+  //     }
+  //   }
+  //
+  //   return <Avatar user={avatarUser} title={avatarTitle} />
+  // }
 
   private get isCoAuthorInputEnabled() {
     return this.props.repository.gitHubRepository !== null
@@ -386,7 +378,6 @@ export class CommitMessage extends React.Component<
         aria-label={this.toggleCoAuthorsText}
         disabled={this.props.isCommitting}
       >
-        <Octicon symbol={addAuthorIcon} />
       </button>
     )
   }
@@ -455,7 +446,7 @@ export class CommitMessage extends React.Component<
     // const selection = this.state.selectedState
     if (!selection || selection.type !== SelectionType.Repository) {
       return null
-    }   
+    }
 
     const state = selection.state
     // const revertProgress = state.revertProgress
@@ -505,7 +496,6 @@ export class CommitMessage extends React.Component<
         onKeyDown={this.onKeyDown}
       >
         <div className="summary">
-          {this.renderAvatar()}
 
           <AutocompletingInput
             className="summary-field"
