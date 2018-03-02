@@ -525,7 +525,8 @@ export class CommitMessage extends React.Component<
         </FocusContainer>
 
         {this.renderCoAuthorInput()}
-        {this.renderPushPullToolbarButton()}
+        <div style={{display: 'flex', paddingTop: 10}}>
+        <div style={{flexGrow: 1}}>
         <Button
           type="submit"
           className="commit-button"
@@ -537,6 +538,11 @@ export class CommitMessage extends React.Component<
             {loading ? 'Committing' : 'Commit'} to <strong>{branchName}</strong>
           </span>
         </Button>
+        </div>
+        <div style={{flexGrow: 1}}>
+        {this.renderPushPullToolbarButton()}
+        </div>
+        </div>
       </div>
     )
   }
