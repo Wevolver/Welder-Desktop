@@ -214,7 +214,6 @@ export function buildDefaultMenu(
     ],
   })
 
-<<<<<<< HEAD
   template.push({
     label: __DARWIN__ ? 'Branch' : '&Branch',
     id: 'branch',

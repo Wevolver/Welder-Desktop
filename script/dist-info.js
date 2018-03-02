@@ -128,7 +128,7 @@ function getReleaseSHA() {
 }
 
 function getUpdatesURL() {
-  return `https://central.github.com/api/deployments/desktop/desktop/latest?version=${version}&env=${getReleaseChannel()}`
+  return `https://hazel-uczitrumes.now.sh/update/${process.platform}/${version}`
 }
 
 function shouldMakeDelta() {
