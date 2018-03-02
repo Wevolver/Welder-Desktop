@@ -68,7 +68,7 @@ export function parseAppURL(url: string): URLActionType {
     const probablyAURL = parsedPath
 
     // suffix the remote URL with `.git`, for backwards compatibility
-    const url = `${probablyAURL}.git`
+    const url = `${probablyAURL}`
 
     const queryString = parsedURL.query
 
