@@ -56,7 +56,7 @@ import {
   sendReady,
 } from './main-process-proxy'
 import { DiscardChanges } from './discard-changes'
-// import { Welcome } from './welcome'
+import { Welcome } from './welcome'
 import { AppMenuBar } from './app-menu'
 import { UpdateAvailable } from './updates'
 import { Preferences } from './preferences'
@@ -1580,15 +1580,15 @@ export class App extends React.Component<IAppProps, IAppState> {
     }
   }
 
-  // private renderWelcomeFlow() {
-  //   return (
-  //     <Welcome
-  //       dispatcher={this.props.dispatcher}
-  //       appStore={this.props.appStore}
-  //       signInState={this.state.signInState}
-  //     />
-  //   )
-  // }
+  private renderWelcomeFlow() {
+    return (
+      <Welcome
+        dispatcher={this.props.dispatcher}
+        appStore={this.props.appStore}
+        signInState={this.state.signInState}
+      />
+    )
+  }
 
   public render() {
     if (this.loading) {
@@ -1597,14 +1597,12 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     const className = this.state.appIsFocused ? 'focused' : 'blurred'
 
-    // {this.state.showWelcomeFlow
-    //       ? this.renderWelcomeFlow()
-    //       : this.renderApp()}
-
     return (
       <div id="desktop-app-chrome" className={className}>
-        {this.renderTitlebar()}
-        {this.renderApp()}
+        {this.renderTitlebar()}    
+        {this.state.showWelcomeFlow
+          ? this.renderWelcomeFlow()
+          : this.renderApp()}
         {this.renderZoomInfo()}
         {this.renderFullScreenInfo()}
       </div>

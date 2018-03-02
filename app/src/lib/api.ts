@@ -771,7 +771,7 @@ async function getNote(): Promise<string> {
     )
   }
 
-  return `GitHub Desktop on ${localUsername}@${OS.hostname()}`
+  return `Wevolver Desktop on ${localUsername}@${OS.hostname()}`
 }
 
 /**

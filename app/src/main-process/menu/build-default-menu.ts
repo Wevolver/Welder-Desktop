@@ -214,6 +214,60 @@ export function buildDefaultMenu(
     ],
   })
 
+<<<<<<< HEAD
+  template.push({
+    label: __DARWIN__ ? 'Branch' : '&Branch',
+    id: 'branch',
+    submenu: [
+      {
+        label: __DARWIN__ ? 'New Branch…' : 'New &branch…',
+        id: 'create-branch',
+        accelerator: 'CmdOrCtrl+Shift+N',
+        click: emit('create-branch'),
+      },
+      {
+        label: __DARWIN__ ? 'Rename…' : '&Rename…',
+        id: 'rename-branch',
+        click: emit('rename-branch'),
+      },
+      {
+        label: __DARWIN__ ? 'Delete…' : '&Delete…',
+        id: 'delete-branch',
+        click: emit('delete-branch'),
+      },
+      separator,
+      {
+        label: __DARWIN__
+          ? 'Update From Default Branch'
+          : '&Update from default branch',
+        id: 'update-branch',
+        accelerator: 'CmdOrCtrl+Shift+U',
+        click: emit('update-branch'),
+      },
+      {
+        label: __DARWIN__
+          ? 'Merge Into Current Branch…'
+          : '&Merge into current branch…',
+        id: 'merge-branch',
+        accelerator: 'CmdOrCtrl+Shift+M',
+        click: emit('merge-branch'),
+      },
+      separator,
+      {
+        label: __DARWIN__ ? 'Compare on Wevolver' : '&Compare on Wevolver',
+        id: 'compare-branch',
+        accelerator: 'CmdOrCtrl+Shift+C',
+        click: emit('compare-branch'),
+      },
+      {
+        label: pullRequestLabel,
+        id: 'create-pull-request',
+        accelerator: 'CmdOrCtrl+R',
+        click: emit('open-pull-request'),
+      },
+    ],
+  })
+
   if (__DARWIN__) {
     template.push({
       role: 'window',

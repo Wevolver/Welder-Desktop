@@ -25,10 +25,10 @@ import { minimumSupportedEnterpriseVersion } from '../../lib/enterprise'
 import { TypedBaseStore } from './base-store'
 
 function getUnverifiedUserErrorMessage(login: string): string {
-  return `Unable to authenticate. The account ${login} is lacking a verified email address. Please sign in to GitHub.com, confirm your email address in the Emails section under Personal settings, and try again.`
+  return `Unable to authenticate. The account ${login} is lacking a verified email address. Please sign in to Wevolver.com, confirm your email address in the Emails section under Personal settings, and try again.`
 }
 
-const EnterpriseTooOldMessage = `The GitHub Enterprise version does not support GitHub Desktop. Talk to your server's administrator about upgrading to the latest version of GitHub Enterprise.`
+const EnterpriseTooOldMessage = `The Wevolver Enterprise version does not support Wevolver Desktop. Talk to your server's administrator about upgrading to the latest version of Wevolver Enterprise.`
 
 /**
  * An enumeration of the possible steps that the sign in
@@ -211,7 +211,7 @@ export class SignInStore extends TypedBaseStore<SignInState | null> {
       }
     } else {
       throw new Error(
-        `Unable to authenticate with the GitHub Enterprise instance. Verify that the URL is correct, that your GitHub Enterprise instance is running version ${minimumSupportedEnterpriseVersion} or later, that you have an internet connection and try again.`
+        `Unable to authenticate with the Wevolver Enterprise instance. Verify that the URL is correct, that your Wevolver Enterprise instance is running version ${minimumSupportedEnterpriseVersion} or later, that you have an internet connection and try again.`
       )
     }
   }
@@ -342,7 +342,7 @@ export class SignInStore extends TypedBaseStore<SignInState | null> {
           ...currentState,
           loading: false,
           error: new Error(
-            'A personal access token cannot be used to login to GitHub Desktop.'
+            'A personal access token cannot be used to login to Wevolver Desktop.'
           ),
         })
       } else if (response.kind === AuthorizationResponseKind.EnterpriseTooOld) {
@@ -575,7 +575,7 @@ export class SignInStore extends TypedBaseStore<SignInState | null> {
         case AuthorizationResponseKind.PersonalAccessTokenBlocked:
           this.emitError(
             new Error(
-              'A personal access token cannot be used to login to GitHub Desktop.'
+              'A personal access token cannot be used to login to Wevolver Desktop.'
             )
           )
           break
