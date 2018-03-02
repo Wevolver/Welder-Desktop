@@ -97,7 +97,7 @@ export class AccountsStore extends BaseStore {
       if (__DARWIN__ && isKeyChainError(e)) {
         this.emitError(
           new Error(
-            `GitHub Desktop was unable to store the account token in the keychain. Please check you have unlocked access to the 'login' keychain.`
+            `Wevolver Desktop was unable to store the account token in the keychain. Please check you have unlocked access to the 'login' keychain.`
           )
         )
       } else {

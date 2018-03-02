@@ -54,7 +54,7 @@ export async function findEditorOrDefault(
   const editors = await getAvailableEditors()
   if (editors.length === 0) {
     throw new ExternalEditorError(
-      'No suitable editors installed for GitHub Desktop to launch. Install Atom for your platform and restart GitHub Desktop to try again.',
+      'No suitable editors installed for Wevolver Desktop to launch. Install Atom for your platform and restart Wevolver Desktop to try again.',
       { suggestAtom: true }
     )
   }

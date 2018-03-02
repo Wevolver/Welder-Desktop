@@ -27,10 +27,10 @@ export function buildDefaultMenu(
 
   if (__DARWIN__) {
     template.push({
-      label: 'GitHub Desktop',
+      label: 'Wevolver Desktop',
       submenu: [
         {
-          label: 'About GitHub Desktop',
+          label: 'About Wevolver Desktop',
           click: emit('show-about'),
           id: 'about',
         },
@@ -224,7 +224,7 @@ export function buildDefaultMenu(
       separator,
       {
         id: 'view-repository-on-github',
-        label: __DARWIN__ ? 'View on GitHub' : '&View on GitHub',
+        label: __DARWIN__ ? 'View on Wevolver' : '&View on Wevolver',
         accelerator: 'CmdOrCtrl+Shift+G',
         click: emit('view-repository-on-github'),
       },
@@ -294,7 +294,7 @@ export function buildDefaultMenu(
       },
       separator,
       {
-        label: __DARWIN__ ? 'Compare on GitHub' : '&Compare on GitHub',
+        label: __DARWIN__ ? 'Compare on Wevolver' : '&Compare on Wevolver',
         id: 'compare-branch',
         accelerator: 'CmdOrCtrl+Shift+C',
         click: emit('compare-branch'),
@@ -329,7 +329,7 @@ export function buildDefaultMenu(
   }
 
   const contactSupportItem: Electron.MenuItemConstructorOptions = {
-    label: __DARWIN__ ? 'Contact GitHub Support…' : '&Contact GitHub support…',
+    label: __DARWIN__ ? 'Contact Wevolver Support…' : '&Contact Wevolver support…',
     click() {
       shell.openExternal(
         `https://github.com/contact?from_desktop_app=1&app_version=${app.getVersion()}`
@@ -397,7 +397,7 @@ export function buildDefaultMenu(
         ...helpItems,
         separator,
         {
-          label: '&About GitHub Desktop',
+          label: '&About Wevolver Desktop',
           click: emit('show-about'),
           id: 'about',
         },
