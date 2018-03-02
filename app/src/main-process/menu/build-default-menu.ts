@@ -1,4 +1,4 @@
-import { Menu, ipcMain, shell, app } from 'electron'
+import { Menu, ipcMain, shell } from 'electron'
 import { ensureItemIds } from './ensure-item-ids'
 import { MenuEvent } from './menu-event'
 import { getLogDirectoryPath } from '../../lib/logging/get-log-path'
@@ -27,10 +27,10 @@ export function buildDefaultMenu(
 
   if (__DARWIN__) {
     template.push({
-      label: 'GitHub Desktop',
+      label: 'Wevolver Desktop',
       submenu: [
         {
-          label: 'About GitHub Desktop',
+          label: 'About Wevolver Desktop',
           click: emit('show-about'),
           id: 'about',
         },
@@ -42,11 +42,11 @@ export function buildDefaultMenu(
           click: emit('show-preferences'),
         },
         separator,
-        {
-          label: 'Install Command Line Tool…',
-          id: 'install-cli',
-          click: emit('install-cli'),
-        },
+        // {
+        //   label: 'Install Command Line Tool…',
+        //   id: 'install-cli',
+        //   click: emit('install-cli'),
+        // },
         separator,
         {
           role: 'services',
@@ -65,19 +65,7 @@ export function buildDefaultMenu(
   const fileMenu: Electron.MenuItemConstructorOptions = {
     label: __DARWIN__ ? 'File' : '&File',
     submenu: [
-      {
-        label: __DARWIN__ ? 'New Repository…' : 'New &repository…',
-        id: 'new-repository',
-        click: emit('create-repository'),
-        accelerator: 'CmdOrCtrl+N',
-      },
       separator,
-      {
-        label: __DARWIN__ ? 'Add Local Repository…' : 'Add &local repository…',
-        id: 'add-local-repository',
-        accelerator: 'CmdOrCtrl+O',
-        click: emit('add-local-repository'),
-      },
       {
         label: __DARWIN__ ? 'Clone Repository…' : 'Clo&ne repository…',
         id: 'clone-repository',
@@ -139,12 +127,6 @@ export function buildDefaultMenu(
         accelerator: 'CmdOrCtrl+T',
         click: emit('choose-repository'),
       },
-      {
-        label: __DARWIN__ ? 'Show Branches List' : '&Branches list',
-        id: 'show-branches-list',
-        accelerator: 'CmdOrCtrl+B',
-        click: emit('show-branches'),
-      },
       separator,
       {
         label: __DARWIN__ ? 'Toggle Full Screen' : 'Toggle &full screen',
@@ -204,27 +186,10 @@ export function buildDefaultMenu(
     label: __DARWIN__ ? 'Repository' : '&Repository',
     id: 'repository',
     submenu: [
-      {
-        id: 'push',
-        label: __DARWIN__ ? 'Push' : 'P&ush',
-        accelerator: 'CmdOrCtrl+P',
-        click: emit('push'),
-      },
-      {
-        id: 'pull',
-        label: __DARWIN__ ? 'Pull' : 'Pu&ll',
-        accelerator: 'CmdOrCtrl+Shift+P',
-        click: emit('pull'),
-      },
-      {
-        label: __DARWIN__ ? 'Remove' : '&Remove',
-        id: 'remove-repository',
-        click: emit('remove-repository'),
-      },
       separator,
       {
         id: 'view-repository-on-github',
-        label: __DARWIN__ ? 'View on GitHub' : '&View on GitHub',
+        label: __DARWIN__ ? 'View on Wevolver' : '&View on Wevolver',
         accelerator: 'CmdOrCtrl+Shift+G',
         click: emit('view-repository-on-github'),
       },
@@ -240,70 +205,11 @@ export function buildDefaultMenu(
         accelerator: 'CmdOrCtrl+Shift+F',
         click: emit('open-working-directory'),
       },
-      {
-        label: editorLabel,
-        id: 'open-external-editor',
-        accelerator: 'CmdOrCtrl+Shift+A',
-        click: emit('open-external-editor'),
-      },
       separator,
       {
         label: __DARWIN__ ? 'Repository Settings…' : 'Repository &settings…',
         id: 'show-repository-settings',
         click: emit('show-repository-settings'),
-      },
-    ],
-  })
-
-  template.push({
-    label: __DARWIN__ ? 'Branch' : '&Branch',
-    id: 'branch',
-    submenu: [
-      {
-        label: __DARWIN__ ? 'New Branch…' : 'New &branch…',
-        id: 'create-branch',
-        accelerator: 'CmdOrCtrl+Shift+N',
-        click: emit('create-branch'),
-      },
-      {
-        label: __DARWIN__ ? 'Rename…' : '&Rename…',
-        id: 'rename-branch',
-        click: emit('rename-branch'),
-      },
-      {
-        label: __DARWIN__ ? 'Delete…' : '&Delete…',
-        id: 'delete-branch',
-        click: emit('delete-branch'),
-      },
-      separator,
-      {
-        label: __DARWIN__
-          ? 'Update From Default Branch'
-          : '&Update from default branch',
-        id: 'update-branch',
-        accelerator: 'CmdOrCtrl+Shift+U',
-        click: emit('update-branch'),
-      },
-      {
-        label: __DARWIN__
-          ? 'Merge Into Current Branch…'
-          : '&Merge into current branch…',
-        id: 'merge-branch',
-        accelerator: 'CmdOrCtrl+Shift+M',
-        click: emit('merge-branch'),
-      },
-      separator,
-      {
-        label: __DARWIN__ ? 'Compare on GitHub' : '&Compare on GitHub',
-        id: 'compare-branch',
-        accelerator: 'CmdOrCtrl+Shift+C',
-        click: emit('compare-branch'),
-      },
-      {
-        label: pullRequestLabel,
-        id: 'create-pull-request',
-        accelerator: 'CmdOrCtrl+R',
-        click: emit('open-pull-request'),
       },
     ],
   })
@@ -321,26 +227,10 @@ export function buildDefaultMenu(
     })
   }
 
-  const submitIssueItem: Electron.MenuItemConstructorOptions = {
-    label: __DARWIN__ ? 'Report Issue…' : 'Report issue…',
-    click() {
-      shell.openExternal('https://github.com/desktop/desktop/issues/new')
-    },
-  }
-
-  const contactSupportItem: Electron.MenuItemConstructorOptions = {
-    label: __DARWIN__ ? 'Contact GitHub Support…' : '&Contact GitHub support…',
-    click() {
-      shell.openExternal(
-        `https://github.com/contact?from_desktop_app=1&app_version=${app.getVersion()}`
-      )
-    },
-  }
-
   const showUserGuides: Electron.MenuItemConstructorOptions = {
     label: 'Show User Guides',
     click() {
-      shell.openExternal('https://help.github.com/desktop/guides/')
+      shell.openExternal('https://help.wevolver.com/')
     },
   }
 
@@ -363,8 +253,6 @@ export function buildDefaultMenu(
   }
 
   const helpItems = [
-    submitIssueItem,
-    contactSupportItem,
     showUserGuides,
     showLogsItem,
   ]
@@ -397,7 +285,7 @@ export function buildDefaultMenu(
         ...helpItems,
         separator,
         {
-          label: '&About GitHub Desktop',
+          label: '&About Wevolver Desktop',
           click: emit('show-about'),
           id: 'about',
         },

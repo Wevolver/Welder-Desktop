@@ -1,8 +1,8 @@
 import { MenuIDs } from '../main-process/menu'
 import { merge } from './merge'
 import { IAppState, SelectionType } from '../lib/app-state'
-import { Repository } from '../models/repository'
-import { CloningRepository } from '../models/cloning-repository'
+// import { Repository } from '../models/repository'
+// import { CloningRepository } from '../models/cloning-repository'
 import { TipState } from '../models/tip'
 import { updateMenuState as ipcUpdateMenuState } from '../ui/main-process-proxy'
 import { AppMenu, MenuItem } from '../models/app-menu'
@@ -71,19 +71,19 @@ class MenuStateBuilder {
   }
 }
 
-function isRepositoryHostedOnGitHub(
-  repository: Repository | CloningRepository
-) {
-  if (
-    !repository ||
-    repository instanceof CloningRepository ||
-    !repository.gitHubRepository
-  ) {
-    return false
-  }
-
-  return repository.gitHubRepository.htmlURL !== null
-}
+// function isRepositoryHostedOnGitHub(
+//   repository: Repository | CloningRepository
+// ) {
+//   if (
+//     !repository ||
+//     repository instanceof CloningRepository ||
+//     !repository.gitHubRepository
+//   ) {
+//     return false
+//   }
+//
+//   return repository.gitHubRepository.htmlURL !== null
+// }
 
 function menuItemStateEqual(state: IMenuItemState, menuItem: MenuItem) {
   if (
@@ -98,32 +98,17 @@ function menuItemStateEqual(state: IMenuItemState, menuItem: MenuItem) {
 }
 
 const allMenuIds: ReadonlyArray<MenuIDs> = [
-  'rename-branch',
-  'delete-branch',
   'preferences',
-  'update-branch',
-  'merge-branch',
   'view-repository-on-github',
-  'compare-branch',
   'open-in-shell',
-  'push',
-  'pull',
-  'branch',
   'repository',
-  'create-branch',
   'show-changes',
   'show-history',
   'show-repository-list',
-  'show-branches-list',
   'open-working-directory',
   'show-repository-settings',
-  'open-external-editor',
-  'remove-repository',
-  'new-repository',
-  'add-local-repository',
   'clone-repository',
   'about',
-  'create-pull-request',
 ]
 
 function getAllMenusDisabledBuilder(): MenuStateBuilder {
@@ -138,20 +123,20 @@ function getAllMenusDisabledBuilder(): MenuStateBuilder {
 
 function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
   const selectedState = state.selectedState
-  const isHostedOnGitHub = selectedState
-    ? isRepositoryHostedOnGitHub(selectedState.repository)
-    : false
+  // const isHostedOnGitHub = selectedState
+  //   ? isRepositoryHostedOnGitHub(selectedState.repository)
+  //   : false
 
   let repositorySelected = false
-  let onNonDefaultBranch = false
-  let onBranch = false
-  let hasDefaultBranch = false
-  let hasPublishedBranch = false
-  let networkActionInProgress = false
-  let tipStateIsUnknown = false
-  let branchIsUnborn = false
+  // let onNonDefaultBranch = false
+  // let onBranch = false
+  // let hasDefaultBranch = false
+  // let hasPublishedBranch = false
+  // let networkActionInProgress = false
+  // let tipStateIsUnknown = false
+  // let branchIsUnborn = false
 
-  let hasRemote = false
+  // let hasRemote = false
 
   if (selectedState && selectedState.type === SelectionType.Repository) {
     repositorySelected = true
@@ -160,11 +145,11 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
     const tip = branchesState.tip
     const defaultBranch = branchesState.defaultBranch
 
-    hasDefaultBranch = Boolean(defaultBranch)
+    // hasDefaultBranch = Boolean(defaultBranch)
 
-    onBranch = tip.kind === TipState.Valid
-    tipStateIsUnknown = tip.kind === TipState.Unknown
-    branchIsUnborn = tip.kind === TipState.Unborn
+    // onBranch = tip.kind === TipState.Valid
+    // tipStateIsUnknown = tip.kind === TipState.Unknown
+    // branchIsUnborn = tip.kind === TipState.Unborn
 
     // If we are:
     //  1. on the default branch, or
@@ -173,33 +158,29 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
     // there's not much we can do.
     if (tip.kind === TipState.Valid) {
       if (defaultBranch !== null) {
-        onNonDefaultBranch = tip.branch.name !== defaultBranch.name
+        // onNonDefaultBranch = tip.branch.name !== defaultBranch.name
       }
 
-      hasPublishedBranch = !!tip.branch.upstream
+      // hasPublishedBranch = !!tip.branch.upstream
     } else {
-      onNonDefaultBranch = true
+      // onNonDefaultBranch = true
     }
 
-    hasRemote = !!selectedState.state.remote
+    // hasRemote = !!selectedState.state.remote
 
-    networkActionInProgress = selectedState.state.isPushPullFetchInProgress
+    // networkActionInProgress = selectedState.state.isPushPullFetchInProgress
   }
 
   // These are IDs for menu items that are entirely _and only_
   // repository-scoped. They're always enabled if we're in a repository and
   // always disabled if we're not.
   const repositoryScopedIDs: ReadonlyArray<MenuIDs> = [
-    'branch',
     'repository',
-    'remove-repository',
     'open-in-shell',
     'open-working-directory',
     'show-repository-settings',
     'show-changes',
     'show-history',
-    'show-branches-list',
-    'open-external-editor',
   ]
 
   const menuStateBuilder = new MenuStateBuilder()
@@ -213,55 +194,8 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
       menuStateBuilder.enable(id)
     }
 
-    menuStateBuilder.setEnabled(
-      'rename-branch',
-      onNonDefaultBranch && !branchIsUnborn
-    )
-    menuStateBuilder.setEnabled(
-      'delete-branch',
-      onNonDefaultBranch && !branchIsUnborn
-    )
-    menuStateBuilder.setEnabled(
-      'update-branch',
-      onNonDefaultBranch && hasDefaultBranch
-    )
-    menuStateBuilder.setEnabled('merge-branch', onBranch)
-    menuStateBuilder.setEnabled(
-      'compare-branch',
-      isHostedOnGitHub && hasPublishedBranch
-    )
-
-    menuStateBuilder.setEnabled('view-repository-on-github', isHostedOnGitHub)
-    menuStateBuilder.setEnabled(
-      'create-pull-request',
-      isHostedOnGitHub && !branchIsUnborn
-    )
-    menuStateBuilder.setEnabled(
-      'push',
-      hasRemote && !branchIsUnborn && !networkActionInProgress
-    )
-    menuStateBuilder.setEnabled(
-      'pull',
-      hasPublishedBranch && !networkActionInProgress
-    )
-    menuStateBuilder.setEnabled(
-      'create-branch',
-      !tipStateIsUnknown && !branchIsUnborn
-    )
-
-    if (
-      selectedState &&
-      selectedState.type === SelectionType.MissingRepository
-    ) {
-      menuStateBuilder.disable('open-external-editor')
-    }
-  } else {
-    for (const id of repositoryScopedIDs) {
-      menuStateBuilder.disable(id)
-    }
 
     menuStateBuilder.disable('view-repository-on-github')
-    menuStateBuilder.disable('create-pull-request')
 
     if (
       selectedState &&
@@ -270,18 +204,9 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
       if (selectedState.repository.gitHubRepository) {
         menuStateBuilder.enable('view-repository-on-github')
       }
-      menuStateBuilder.enable('remove-repository')
+      // menuStateBuilder.enable('remove-repository')
     }
 
-    menuStateBuilder.disable('create-branch')
-    menuStateBuilder.disable('rename-branch')
-    menuStateBuilder.disable('delete-branch')
-    menuStateBuilder.disable('update-branch')
-    menuStateBuilder.disable('merge-branch')
-    menuStateBuilder.disable('compare-branch')
-
-    menuStateBuilder.disable('push')
-    menuStateBuilder.disable('pull')
   }
   return menuStateBuilder
 }
@@ -306,8 +231,6 @@ function getAllMenusEnabledBuilder(): MenuStateBuilder {
 
 function getInWelcomeFlowBuilder(inWelcomeFlow: boolean): MenuStateBuilder {
   const welcomeScopedIds: ReadonlyArray<MenuIDs> = [
-    'new-repository',
-    'add-local-repository',
     'clone-repository',
     'preferences',
     'about',
