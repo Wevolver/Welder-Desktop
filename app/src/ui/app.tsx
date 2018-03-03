@@ -756,18 +756,17 @@ export class App extends React.Component<IAppProps, IAppState> {
 
   /** Returns the URL to the current repository if hosted on GitHub */
   private getCurrentRepositoryGitHubURL() {
-    const repository = this.getRepository()
 
-    console.log(repository)
-    // if (
-    //   !repository ||
-    //   repository instanceof CloningRepository ||
-    //   !repository.gitHubRepository
-    // ) {
+    const selection = this.state.selectedState
+    if (!selection || selection.type !== SelectionType.Repository) {
       return null
-    // }
-
-    // return repository.gitHubRepository.htmlURL
+    }
+    const state = selection.state
+    const remoteUrl = state.remote ? state.remote.url: null
+    if(remoteUrl){
+      return(remoteUrl.replace('projects.', ''))
+    }
+    return null
   }
 
   private openCurrentRepositoryInShell() {
@@ -1599,7 +1598,7 @@ export class App extends React.Component<IAppProps, IAppState> {
 
     return (
       <div id="desktop-app-chrome" className={className}>
-        {this.renderTitlebar()}    
+        {this.renderTitlebar()}
         {this.state.showWelcomeFlow
           ? this.renderWelcomeFlow()
           : this.renderApp()}

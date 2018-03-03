@@ -195,15 +195,12 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
     }
 
 
-    menuStateBuilder.disable('view-repository-on-github')
+    menuStateBuilder.enable('view-repository-on-github')
 
     if (
       selectedState &&
       selectedState.type === SelectionType.MissingRepository
     ) {
-      if (selectedState.repository.gitHubRepository) {
-        menuStateBuilder.enable('view-repository-on-github')
-      }
       // menuStateBuilder.enable('remove-repository')
     }
 

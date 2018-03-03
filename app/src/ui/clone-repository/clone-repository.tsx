@@ -124,14 +124,6 @@ export class CloneRepository extends React.Component<
   }
 
   private renderFooter() {
-    const selectedTab = this.props.selectedTab
-    if (
-      selectedTab !== CloneRepositoryTab.Generic &&
-      !this.getAccountForTab(selectedTab)
-    ) {
-      return null
-    }
-
     const error = this.state.error
     const disabled =
       this.state.url.length === 0 ||
@@ -172,16 +164,16 @@ export class CloneRepository extends React.Component<
     // return assertNever(tab, `Unknown tab: ${tab}`)
   }
 
-  private getAccountForTab(tab: CloneRepositoryTab): Account | null {
-    switch (tab) {
-      case CloneRepositoryTab.DotCom:
-        return this.props.dotComAccount
-      case CloneRepositoryTab.Enterprise:
-        return this.props.enterpriseAccount
-      default:
-        return null
-    }
-  }
+  // private getAccountForTab(tab: CloneRepositoryTab): Account | null {
+  //   switch (tab) {
+  //     case CloneRepositoryTab.DotCom:
+  //       return this.props.dotComAccount
+  //     case CloneRepositoryTab.Enterprise:
+  //       return this.props.enterpriseAccount
+  //     default:
+  //       return null
+  //   }
+  // }
 
   private updateAndValidatePath = async (path: string) => {
     this.setState({ path })
