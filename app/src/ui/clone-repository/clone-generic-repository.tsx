@@ -33,7 +33,7 @@ export class CloneGenericRepository extends React.Component<
       <DialogContent className="clone-generic-repository-content">
         <Row>
           <TextBox
-            placeholder="URL or username/repository"
+            placeholder="URL"
             value={this.props.url}
             onValueChanged={this.onUrlChanged}
             autoFocus={true}

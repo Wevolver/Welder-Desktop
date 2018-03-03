@@ -175,19 +175,19 @@ app.on('ready', () => {
 
   readyTime = now() - launchTime
 
-  setAsDefaultProtocolClient('x-github-client')
+  setAsDefaultProtocolClient('x-wevovler-client')
 
   if (__DEV__) {
-    setAsDefaultProtocolClient('x-github-desktop-dev-auth')
+    setAsDefaultProtocolClient('x-wevovler-desktop-dev-auth')
   } else {
-    setAsDefaultProtocolClient('x-github-desktop-auth')
+    setAsDefaultProtocolClient('x-wevovler-desktop-auth')
   }
 
   // Also support Desktop Classic's protocols.
   if (__DARWIN__) {
-    setAsDefaultProtocolClient('github-mac')
+    setAsDefaultProtocolClient('wevovler-mac')
   } else if (__WIN32__) {
-    setAsDefaultProtocolClient('github-windows')
+    setAsDefaultProtocolClient('wevovler-windows')
   }
 
   createWindow()
