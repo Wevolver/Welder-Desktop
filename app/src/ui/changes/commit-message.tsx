@@ -334,8 +334,8 @@ export class CommitMessage extends React.Component<
           />
         </div>
 
-        <div style={{display: 'flex', paddingTop: 10}}>
-        <div style={{flexGrow: 1}}>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+        <div style={{ width: '49%'}}>
         <Button
           type="submit"
           className="commit-button"
@@ -348,7 +348,7 @@ export class CommitMessage extends React.Component<
           </span>
         </Button>
         </div>
-        <div style={{flexGrow: 1}}>
+        <div style={{ width: '49%'}}>
         {this.renderPushPullToolbarButton()}
         </div>
         </div>
