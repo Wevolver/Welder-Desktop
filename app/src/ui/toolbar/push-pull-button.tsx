@@ -138,10 +138,10 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
       if (ahead > 0) {
         return 'Push'
       }
-      return 'Fetch'
+      return 'Sync'
     })()
 
-    return `${actionName} ${this.props.remoteName}`
+    return `${actionName}`
   }
 
   private getIcon(): OcticonSymbol {
@@ -171,7 +171,7 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
 
   private getDescription(tipState: TipState): JSX.Element | string {
     if (!this.props.remoteName) {
-      return 'Publish this repository to GitHub'
+      return 'Publish this repository to Wevolver'
     }
 
     if (tipState === TipState.Detached) {
@@ -193,11 +193,11 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
     if (lastFetched) {
       return (
         <span>
-          Last fetched <RelativeTime date={lastFetched} />
+          Last synced <RelativeTime date={lastFetched} />
         </span>
       )
     } else {
-      return 'Never fetched'
+      return 'Never synced'
     }
   }
 
