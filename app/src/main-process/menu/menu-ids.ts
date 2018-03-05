@@ -2,7 +2,6 @@ export type MenuIDs =
   | 'preferences'
   | 'view-repository-on-github'
   | 'open-in-shell'
-  | 'repository'
   | 'show-changes'
   | 'show-history'
   | 'show-repository-list'

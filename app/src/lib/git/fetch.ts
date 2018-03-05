@@ -31,7 +31,7 @@ export async function fetch(
   }
 
   if (progressCallback) {
-    const title = `Fetching ${remote}`
+    const title = `Syncing`
     const kind = 'fetch'
 
     opts = await executionOptionsWithProgress(

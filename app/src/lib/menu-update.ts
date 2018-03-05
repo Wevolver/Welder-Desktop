@@ -101,7 +101,7 @@ const allMenuIds: ReadonlyArray<MenuIDs> = [
   'preferences',
   'view-repository-on-github',
   'open-in-shell',
-  'repository',
+  // 'repository',
   'show-changes',
   'show-history',
   'show-repository-list',
@@ -175,7 +175,7 @@ function getRepositoryMenuBuilder(state: IAppState): MenuStateBuilder {
   // repository-scoped. They're always enabled if we're in a repository and
   // always disabled if we're not.
   const repositoryScopedIDs: ReadonlyArray<MenuIDs> = [
-    'repository',
+    // 'repository',
     'open-in-shell',
     'open-working-directory',
     'show-repository-settings',

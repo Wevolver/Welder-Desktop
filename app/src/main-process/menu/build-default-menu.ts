@@ -42,12 +42,6 @@ export function buildDefaultMenu(
           click: emit('show-preferences'),
         },
         separator,
-        // {
-        //   label: 'Install Command Line Tool…',
-        //   id: 'install-cli',
-        //   click: emit('install-cli'),
-        // },
-        separator,
         {
           role: 'services',
           submenu: [],
@@ -63,7 +57,7 @@ export function buildDefaultMenu(
   }
 
   const fileMenu: Electron.MenuItemConstructorOptions = {
-    label: __DARWIN__ ? 'File' : '&File',
+    label: __DARWIN__ ? 'Project' : '&Project',
     submenu: [
       separator,
       {
@@ -71,6 +65,31 @@ export function buildDefaultMenu(
         id: 'clone-repository',
         accelerator: 'CmdOrCtrl+Shift+O',
         click: emit('clone-repository'),
+      },
+      separator,
+      {
+        id: 'view-repository-on-github',
+        label: __DARWIN__ ? 'View on Wevolver' : '&View on Wevolver',
+        accelerator: 'CmdOrCtrl+Shift+G',
+        click: emit('view-repository-on-github'),
+      },
+      {
+        label: shellLabel,
+        id: 'open-in-shell',
+        accelerator: 'Ctrl+`',
+        click: emit('open-in-shell'),
+      },
+      {
+        label: __DARWIN__ ? 'Show in Finder' : 'Show in E&xplorer',
+        id: 'open-working-directory',
+        accelerator: 'CmdOrCtrl+Shift+F',
+        click: emit('open-working-directory'),
+      },
+      separator,
+      {
+        label: __DARWIN__ ? 'Project Settings…' : 'Project &settings…',
+        id: 'show-repository-settings',
+        click: emit('show-repository-settings'),
       },
     ],
   }
@@ -182,39 +201,15 @@ export function buildDefaultMenu(
     ],
   })
 
-  template.push({
-    label: __DARWIN__ ? 'Project' : '&Project',
-    id: 'repository',
-    submenu: [
-      separator,
-      {
-        id: 'view-repository-on-github',
-        label: __DARWIN__ ? 'View on Wevolver' : '&View on Wevolver',
-        accelerator: 'CmdOrCtrl+Shift+G',
-        click: emit('view-repository-on-github'),
-      },
-      {
-        label: shellLabel,
-        id: 'open-in-shell',
-        accelerator: 'Ctrl+`',
-        click: emit('open-in-shell'),
-      },
-      {
-        label: __DARWIN__ ? 'Show in Finder' : 'Show in E&xplorer',
-        id: 'open-working-directory',
-        accelerator: 'CmdOrCtrl+Shift+F',
-        click: emit('open-working-directory'),
-      },
-      separator,
-      {
-        label: __DARWIN__ ? 'Project Settings…' : 'Project &settings…',
-        id: 'show-repository-settings',
-        click: emit('show-repository-settings'),
-      },
-    ],
-  })
 
-  
+  // template.push({
+  //   label: __DARWIN__ ? 'Project' : '&Project',
+  //   id: 'repository',
+  //   submenu: [
+  //   ],
+  // })
+  //
+
 
   if (__DARWIN__) {
     template.push({
