@@ -13,7 +13,7 @@
   color: var(--secondary-button-text-color);
   background-color: var(--secondary-button-background);
 
-  border-radius: var(--button-border-radius);
+  border-radius: 0;
 
   &:not(:disabled):hover {
     border-color: var(--secondary-button-focus-border-color);
