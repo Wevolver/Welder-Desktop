@@ -2,7 +2,6 @@ import * as React from 'react'
 import * as classNames from 'classnames'
 import {
   AutocompletingTextArea,
-  AutocompletingInput,
   IAutocompletionProvider,
   UserAutocompletionProvider,
 } from '../autocompletion'
@@ -13,14 +12,8 @@ import { Dispatcher } from '../../lib/dispatcher'
 import { IGitHubUser } from '../../lib/databases/github-user-database'
 import { Repository } from '../../models/repository'
 import { Button } from '../lib/button'
-// import { Avatar } from '../lib/avatar'
 import { Loading } from '../lib/loading'
 import { structuralEquals } from '../../lib/equality'
-// import { generateGravatarUrl } from '../../lib/gravatar'
-import { AuthorInput } from '../lib/author-input'
-import { FocusContainer } from '../lib/focus-container'
-import { showContextualMenu, IMenuItem } from '../main-process-proxy'
-// import { Octicon, OcticonSymbol } from '../octicons'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { IAuthor } from '../../models/author'
 import { AppStore } from '../../lib/stores'
@@ -94,10 +87,10 @@ export class CommitMessage extends React.Component<
   ICommitMessageProps,
   ICommitMessageState
 > {
-  private descriptionComponent: AutocompletingTextArea | null = null
+  // private descriptionComponent: AutocompletingTextArea | null = null
 
-  private descriptionTextArea: HTMLTextAreaElement | null = null
-  private descriptionTextAreaScrollDebounceId: number | null = null
+  // private descriptionTextArea: HTMLTextAreaElement | null = null
+  // private descriptionTextAreaScrollDebounceId: number | null = null
 
   public constructor(props: ICommitMessageProps) {
     super(props)
@@ -219,9 +212,9 @@ export class CommitMessage extends React.Component<
     this.setState({ summary })
   }
 
-  private onDescriptionChanged = (description: string) => {
-    this.setState({ description })
-  }
+  // private onDescriptionChanged = (description: string) => {
+  //   this.setState({ description })
+  // }
 
   private onSubmit = () => {
     this.createCommit()
@@ -274,28 +267,6 @@ export class CommitMessage extends React.Component<
     }
   }
 
-  // private renderAvatar() {
-  //   const commitAuthor = this.props.commitAuthor
-  //   const avatarTitle = commitAuthor
-  //     ? `Committing as ${commitAuthor.name} <${commitAuthor.email}>`
-  //     : undefined
-  //   let avatarUser = undefined
-  //
-  //   if (commitAuthor) {
-  //     const avatarURL = this.props.gitHubUser
-  //       ? this.props.gitHubUser.avatarURL
-  //       : generateGravatarUrl(commitAuthor.email)
-  //
-  //     avatarUser = {
-  //       email: commitAuthor.email,
-  //       name: commitAuthor.name,
-  //       avatarURL,
-  //     }
-  //   }
-  //
-  //   return <Avatar user={avatarUser} title={avatarTitle} />
-  // }
-
   private get isCoAuthorInputEnabled() {
     return this.props.repository.gitHubRepository !== null
   }
@@ -304,141 +275,11 @@ export class CommitMessage extends React.Component<
     return this.props.showCoAuthoredBy && this.isCoAuthorInputEnabled
   }
 
-  private onCoAuthorsUpdated = (coAuthors: ReadonlyArray<IAuthor>) => {
-    this.props.dispatcher.setCoAuthors(this.props.repository, coAuthors)
-  }
-
-  private renderCoAuthorInput() {
-    if (!this.isCoAuthorInputVisible) {
-      return null
-    }
-
-    const autocompletionProvider = this.state.userAutocompletionProvider
-
-    if (!autocompletionProvider) {
-      return null
-    }
-
-    return (
-      <AuthorInput
-        onAuthorsUpdated={this.onCoAuthorsUpdated}
-        authors={this.props.coAuthors}
-        autoCompleteProvider={autocompletionProvider}
-        disabled={this.props.isCommitting}
-      />
-    )
-  }
-
-  private onToggleCoAuthors = () => {
-    this.props.dispatcher.setShowCoAuthoredBy(
-      this.props.repository,
-      !this.props.showCoAuthoredBy
-    )
-  }
-
-  private get toggleCoAuthorsText(): string {
-    return this.props.showCoAuthoredBy
-      ? __DARWIN__ ? 'Remove Co-Authors' : 'Remove co-authors'
-      : __DARWIN__ ? 'Add Co-Authors' : 'Add co-authors'
-  }
-
-  private onContextMenu = (event: React.MouseEvent<any>) => {
-    event.preventDefault()
-
-    const items: IMenuItem[] = [
-      {
-        label: this.toggleCoAuthorsText,
-        action: this.onToggleCoAuthors,
-        enabled:
-          this.props.repository.gitHubRepository !== null &&
-          !this.props.isCommitting,
-      },
-    ]
-
-    showContextualMenu(items)
-  }
-
-  private onCoAuthorToggleButtonClick = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    e.preventDefault()
-    this.onToggleCoAuthors()
-  }
-
-  private renderCoAuthorToggleButton() {
-    if (this.props.repository.gitHubRepository === null) {
-      return null
-    }
-
-    return (
-      <button
-        className="co-authors-toggle"
-        onClick={this.onCoAuthorToggleButtonClick}
-        tabIndex={-1}
-        aria-label={this.toggleCoAuthorsText}
-        disabled={this.props.isCommitting}
-      >
-      </button>
-    )
-  }
-
-  private onDescriptionFieldRef = (
-    component: AutocompletingTextArea | null
-  ) => {
-    this.descriptionComponent = component
-  }
-
-  private onDescriptionTextAreaScroll = () => {
-    this.descriptionTextAreaScrollDebounceId = null
-
-    const elem = this.descriptionTextArea
-    const descriptionObscured =
-      elem !== null && elem.scrollTop + elem.offsetHeight < elem.scrollHeight
-
-    if (this.state.descriptionObscured !== descriptionObscured) {
-      this.setState({ descriptionObscured })
-    }
-  }
-
-  private onDescriptionTextAreaRef = (elem: HTMLTextAreaElement | null) => {
-    if (elem) {
-      elem.addEventListener('scroll', () => {
-        if (this.descriptionTextAreaScrollDebounceId !== null) {
-          cancelAnimationFrame(this.descriptionTextAreaScrollDebounceId)
-          this.descriptionTextAreaScrollDebounceId = null
-        }
-        this.descriptionTextAreaScrollDebounceId = requestAnimationFrame(
-          this.onDescriptionTextAreaScroll
-        )
-      })
-    }
-
-    this.descriptionTextArea = elem
-  }
-
-  private onFocusContainerClick = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (this.descriptionComponent) {
-      this.descriptionComponent.focus()
-    }
-  }
-
   /**
    * Whether or not there's anything to render in the action bar
    */
   private get isActionBarEnabled() {
     return this.isCoAuthorInputEnabled
-  }
-
-  private renderActionBar() {
-    if (!this.isCoAuthorInputEnabled) {
-      return null
-    }
-
-    const className = classNames('action-bar', {
-      disabled: this.props.isCommitting,
-    })
-
-    return <div className={className}>{this.renderCoAuthorToggleButton()}</div>
   }
 
   private renderPushPullToolbarButton() {
@@ -449,11 +290,6 @@ export class CommitMessage extends React.Component<
     }
 
     const state = selection.state
-    // const revertProgress = state.revertProgress
-    // if (revertProgress) {
-    //   return <RevertProgress progress={revertProgress} />
-    // }
-
     const remoteName = state.remote ? state.remote.name : null
     const progress = state.pushPullFetchProgress
 
@@ -473,17 +309,10 @@ export class CommitMessage extends React.Component<
   }
 
   public render() {
-    const branchName = this.props.branch ? this.props.branch : 'master'
     const buttonEnabled = this.canCommit() && !this.props.isCommitting
-
     const loading = this.props.isCommitting ? <Loading /> : undefined
     const className = classNames({
-      'with-action-bar': this.isActionBarEnabled,
-      'with-co-authors': this.isCoAuthorInputVisible,
-    })
-
-    const descriptionClassName = classNames('description-field', {
-      'with-overflow': this.state.descriptionObscured,
+      'with-action-bar': this.isActionBarEnabled
     })
 
     return (
@@ -492,14 +321,12 @@ export class CommitMessage extends React.Component<
         role="group"
         aria-label="Create commit"
         className={className}
-        onContextMenu={this.onContextMenu}
         onKeyDown={this.onKeyDown}
       >
         <div className="summary">
-
-          <AutocompletingInput
+          <AutocompletingTextArea
             className="summary-field"
-            placeholder="Summary"
+            placeholder="Revision Message"
             value={this.state.summary}
             onValueChanged={this.onSummaryChanged}
             autocompletionProviders={this.props.autocompletionProviders}
@@ -507,24 +334,6 @@ export class CommitMessage extends React.Component<
           />
         </div>
 
-        <FocusContainer
-          className="description-focus-container"
-          onClick={this.onFocusContainerClick}
-        >
-          <AutocompletingTextArea
-            className={descriptionClassName}
-            placeholder="Description"
-            value={this.state.description || ''}
-            onValueChanged={this.onDescriptionChanged}
-            autocompletionProviders={this.props.autocompletionProviders}
-            ref={this.onDescriptionFieldRef}
-            onElementRef={this.onDescriptionTextAreaRef}
-            disabled={this.props.isCommitting}
-          />
-          {this.renderActionBar()}
-        </FocusContainer>
-
-        {this.renderCoAuthorInput()}
         <div style={{display: 'flex', paddingTop: 10}}>
         <div style={{flexGrow: 1}}>
         <Button
@@ -534,8 +343,8 @@ export class CommitMessage extends React.Component<
           disabled={!buttonEnabled}
         >
           {loading}
-          <span title={`Commit to ${branchName}`}>
-            {loading ? 'Committing' : 'Commit'} to <strong>{branchName}</strong>
+          <span title={`Save Revision`}>
+            {loading ? 'Saving' : 'Save Revision'}
           </span>
         </Button>
         </div>

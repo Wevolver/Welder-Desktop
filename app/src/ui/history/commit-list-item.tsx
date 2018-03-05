@@ -6,7 +6,7 @@ import { RichText } from '../lib/rich-text'
 import { RelativeTime } from '../relative-time'
 import { CommitAttribution } from '../lib/commit-attribution'
 import { IGitHubUser } from '../../lib/databases/github-user-database'
-import { AvatarStack } from '../lib/avatar-stack'
+// import { AvatarStack } from '../lib/avatar-stack'
 
 interface ICommitProps {
   readonly gitHubRepository: GitHubRepository | null
@@ -64,7 +64,6 @@ export class CommitListItem extends React.Component<
             renderUrlsAsLinks={false}
           />
           <div className="description">
-            <AvatarStack users={this.state.avatarUsers} />
             <div className="byline">
               <CommitAttribution
                 gitHubRepository={this.props.gitHubRepository}

@@ -7,7 +7,7 @@ const localStorageKey = 'last-clone-location'
 export function getDefaultDir(): string {
   return (
     localStorage.getItem(localStorageKey) ||
-    Path.join(getDocumentsPath(), 'GitHub')
+    Path.join(getDocumentsPath(), 'Wevolver')
   )
 }
 
