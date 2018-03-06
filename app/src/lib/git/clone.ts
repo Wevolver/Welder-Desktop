@@ -69,7 +69,7 @@ export async function clone(
     args.push('-b', options.branch)
   }
 
-  args.push('--', url, path)
+  args.push('--', url, path);
 
   await git(args, __dirname, 'clone', opts)
 }

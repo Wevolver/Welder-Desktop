@@ -176,9 +176,9 @@ export class CloneRepository extends React.Component<
   // }
 
   private updateAndValidatePath = async (path: string) => {
-    this.setState({ path })
+    this.setState({ path: path.replace(/%20/g, " ") })
 
-    const doesDirectoryExist = await this.doesPathExist(path)
+    const doesDirectoryExist = await this.doesPathExist(path.replace(/%20/g, " "))
 
     if (doesDirectoryExist) {
       const error: Error = new Error('The destination already exists.')
