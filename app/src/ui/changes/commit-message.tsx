@@ -323,10 +323,11 @@ export class CommitMessage extends React.Component<
         className={className}
         onKeyDown={this.onKeyDown}
       >
+      <h3> Revision Message </h3>
         <div className="summary">
           <AutocompletingTextArea
             className="summary-field"
-            placeholder="Revision Message"
+            placeholder="Message"
             value={this.state.summary}
             onValueChanged={this.onSummaryChanged}
             autocompletionProviders={this.props.autocompletionProviders}
