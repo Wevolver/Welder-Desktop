@@ -57,7 +57,7 @@ export function buildDefaultMenu(
   }
 
   const fileMenu: Electron.MenuItemConstructorOptions = {
-    label: __DARWIN__ ? 'Project' : '&Project',
+    label: __DARWIN__ ? 'File' : '&File',
     submenu: [
       separator,
       {
