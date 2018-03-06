@@ -1628,7 +1628,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.emitUpdate()
   }
 
-  /** This shouldn't be called directly. See `Dispatcher`. */
+  /** This shouldn't be called directly. See `installLFSHooks`. */
   public async _createBranch(
     repository: Repository,
     name: string,
@@ -2831,7 +2831,6 @@ export class AppStore extends TypedBaseStore<IAppState> {
           this.isUsingLFS(addedRepo),
         ])
         addedRepositories.push(refreshedRepo)
-
         if (usingLFS) {
           lfsRepositories.push(refreshedRepo)
         }
@@ -2841,13 +2840,13 @@ export class AppStore extends TypedBaseStore<IAppState> {
       }
     }
 
-    if (lfsRepositories.length > 0) {
-      this._showPopup({
-        type: PopupType.InitializeLFS,
-        repositories: lfsRepositories,
-      })
-    }
-
+    // if (lfsRepositories.length > 0) {
+    //   this._showPopup({
+    //     type: PopupType.InitializeLFS,
+    //     repositories: lfsRepositories,
+    //   })
+    // }
+    this._installLFSHooks(lfsRepositories)
     return addedRepositories
   }
 
