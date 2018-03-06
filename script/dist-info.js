@@ -85,7 +85,7 @@ function getWindowsDeltaNugetPackagePath() {
 }
 
 function getWindowsIdentifierName() {
-  return 'GitHubDesktop'
+  return 'WevolverDesktop'
 }
 
 function getBundleSizes() {
