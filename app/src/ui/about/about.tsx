@@ -227,7 +227,7 @@ export class About extends React.Component<IAboutProps, IAboutState> {
         <DialogError>
           Couldn't determine the last time an update check was performed. You
           may be running an old version. Please try manually checking for
-          updates and contact GitHub Support if the problem persists
+          updates and contact Wevolver Support if the problem persists
         </DialogError>
       )
     }

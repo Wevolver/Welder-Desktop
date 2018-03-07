@@ -1695,7 +1695,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     try {
       this.updateCheckoutProgress(repository, {
         kind,
-        title: __DARWIN__ ? 'Refreshing Repository' : 'Refreshing repository',
+        title: __DARWIN__ ? 'Refreshing Project' : 'Refreshing project',
         value: 1,
         targetBranch: foundBranch.name,
       })
@@ -1958,8 +1958,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
             )
 
             const refreshTitle = __DARWIN__
-              ? 'Refreshing Repository'
-              : 'Refreshing repository'
+              ? 'Refreshing Project'
+              : 'Refreshing project'
             const refreshStartProgress = pushWeight + fetchWeight
 
             this.updatePushPullFetchProgress(repository, {
@@ -2125,8 +2125,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
           const refreshStartProgress = pullWeight + fetchWeight
           const refreshTitle = __DARWIN__
-            ? 'Refreshing Repository'
-            : 'Refreshing repository'
+            ? 'Refreshing Project'
+            : 'Refreshing project'
 
           this.updatePushPullFetchProgress(repository, {
             kind: 'generic',
@@ -2415,8 +2415,8 @@ export class AppStore extends TypedBaseStore<IAppState> {
         }
 
         const refreshTitle = __DARWIN__
-          ? 'Refreshing Repository'
-          : 'Refreshing repository'
+          ? 'Refreshing Project'
+          : 'Refreshing project'
 
         this.updatePushPullFetchProgress(repository, {
           kind: 'generic',
