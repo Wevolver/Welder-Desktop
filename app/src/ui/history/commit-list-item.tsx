@@ -53,6 +53,19 @@ export class CommitListItem extends React.Component<
   public render() {
     const commit = this.props.commit
     const author = commit.author
+    var summary = commit.summary
+    console.log(commit)
+    var period_index = summary.includes(".") ? summary.indexOf(".") : Infinity
+    var newline_index = summary.includes("\n") ? summary.indexOf("\n") : Infinity
+    var show_summary = ''
+
+    if(period_index > 50 && newline_index > 50) {
+      show_summary = summary.substr(0, 50)
+    } else if ( period_index > newline_index ) {
+      show_summary = summary.substr(0, newline_index)
+    } else {
+      show_summary = summary.substr(0, period_index+1)
+    }
 
     return (
       <div className="commit" onContextMenu={this.onContextMenu}>
@@ -60,7 +73,8 @@ export class CommitListItem extends React.Component<
           <RichText
             className="summary"
             emoji={this.props.emoji}
-            text={commit.summary}
+            text={show_summary}
+            hover={summary}
             renderUrlsAsLinks={false}
           />
           <div className="description">

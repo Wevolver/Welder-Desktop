@@ -17,6 +17,7 @@ interface IRichTextProps {
   /** Should URLs be rendered as clickable links. Default true. */
   readonly renderUrlsAsLinks?: boolean
 
+  readonly hover?: string
   /**
    * The repository to use as the source for URLs for the rich text.
    *
@@ -69,8 +70,9 @@ export class RichText extends React.Component<IRichTextProps, {}> {
       }
     })
 
+    var hover = this.props.hover ? this.props.hover : str
     return (
-      <div className={this.props.className} title={str}>
+      <div className={this.props.className} title={hover}>
         {elements}
       </div>
     )
