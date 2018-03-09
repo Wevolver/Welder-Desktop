@@ -54,8 +54,7 @@ export class CommitListItem extends React.Component<
     const commit = this.props.commit
     const author = commit.author
     var summary = commit.summary
-    console.log(commit)
-    var period_index = summary.includes(".") ? summary.indexOf(".") : Infinity
+    var period_index = summary.includes(". ") ? summary.indexOf(". ") : Infinity
     var newline_index = summary.includes("\n") ? summary.indexOf("\n") : Infinity
     var show_summary = ''
 
@@ -64,6 +63,8 @@ export class CommitListItem extends React.Component<
     } else if ( period_index > newline_index ) {
       show_summary = summary.substr(0, newline_index)
     } else {
+      console.log(summary.substr(0, period_index+1))
+      console.log(summary.substr(period_index+1, summary.length))
       show_summary = summary.substr(0, period_index+1)
     }
 
