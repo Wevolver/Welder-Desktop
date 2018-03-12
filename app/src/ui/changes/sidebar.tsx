@@ -258,7 +258,6 @@ export class ChangesSidebar extends React.Component<IChangesSidebarProps, {}> {
           onIgnore={this.onIgnore}
           isCommitting={this.props.isCommitting}
           showCoAuthoredBy={this.props.changes.showCoAuthoredBy}
-          coAuthors={this.props.changes.coAuthors}
         />
       </div>
     )

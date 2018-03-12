@@ -1,11 +1,9 @@
 import * as React from 'react'
-import * as classNames from 'classnames'
 import {
   AutocompletingTextArea,
   IAutocompletionProvider,
   UserAutocompletionProvider,
 } from '../autocompletion'
-import { PushPullButton } from '../toolbar'
 import { CommitIdentity } from '../../models/commit-identity'
 import { ICommitMessage } from '../../lib/app-state'
 import { Dispatcher } from '../../lib/dispatcher'
@@ -15,7 +13,6 @@ import { Button } from '../lib/button'
 import { Loading } from '../lib/loading'
 import { structuralEquals } from '../../lib/equality'
 import { ITrailer } from '../../lib/git/interpret-trailers'
-import { IAuthor } from '../../models/author'
 import { AppStore } from '../../lib/stores'
 import { SelectionType } from '../../lib/app-state'
 
@@ -51,7 +48,6 @@ interface ICommitMessageProps {
    * Co-Authored-By commit message trailers depending on whether
    * the user has chosen to do so.
    */
-  readonly coAuthors: ReadonlyArray<IAuthor>
 }
 
 interface ICommitMessageState {
@@ -220,30 +216,18 @@ export class CommitMessage extends React.Component<
     this.getLatestChanges()
   }
 
-  private getCoAuthorTrailers() {
-    if (!this.isCoAuthorInputEnabled) {
-      return []
-    }
-
-    return this.props.coAuthors.map(a => ({
-      token: 'Co-Authored-By',
-      value: `${a.name} <${a.email}>`,
-    }))
+  private onSave = () => {
+    this.createCommit()
   }
 
   private async createCommit() {
     const { summary, description } = this.state
-
     if (!this.canCommit()) {
       return
     }
-
-    const trailers = this.getCoAuthorTrailers()
-
     const commitCreated = await this.props.onCreateCommit(
       summary,
-      description,
-      trailers
+      description
     )
 
     if (commitCreated) {
@@ -278,63 +262,18 @@ export class CommitMessage extends React.Component<
       event.preventDefault()
     }
   }
-
-  private get isCoAuthorInputEnabled() {
-    return this.props.repository.gitHubRepository !== null
-  }
-
-  private get isCoAuthorInputVisible() {
-    return this.props.showCoAuthoredBy && this.isCoAuthorInputEnabled
-  }
-
-  /**
-   * Whether or not there's anything to render in the action bar
-   */
-  private get isActionBarEnabled() {
-    return this.isCoAuthorInputEnabled
-  }
-
-  private renderPushPullToolbarButton() {
-    const selection = this.props.appStore.getState().selectedState
-    // const selection = this.state.selectedState
-    if (!selection || selection.type !== SelectionType.Repository) {
-      return null
-    }
-
-    const state = selection.state
-    const remoteName = state.remote ? state.remote.name : null
-    const progress = state.pushPullFetchProgress
-
-    const tipState = state.branchesState.tip.kind
-    return (
-      <PushPullButton
-        dispatcher={this.props.dispatcher}
-        repository={selection.repository}
-        aheadBehind={state.aheadBehind}
-        remoteName={remoteName}
-        lastFetched={state.lastFetched}
-        networkActionInProgress={state.isPushPullFetchInProgress}
-        progress={progress}
-        tipState={tipState}
-      />
-    )
-  }
-
   public render() {
-    const buttonEnabled = true // this.canCommit() && !this.props.isCommitting
+    const buttonEnabled = true
     const loading = this.props.isCommitting ? <Loading /> : undefined
-    const className = classNames({
-      'with-action-bar': this.isActionBarEnabled
-    })
 
     return (
       <div
         id="commit-message"
         role="group"
         aria-label="Create commit"
-        className={className}
         onKeyDown={this.onKeyDown}
       >
+
       <h3> Revision Message </h3>
         <div className="summary">
           <AutocompletingTextArea
@@ -362,7 +301,17 @@ export class CommitMessage extends React.Component<
             </Button>
           </div>
           <div style={{ width: '49%'}}>
-            {this.renderPushPullToolbarButton()}
+            <Button
+              type="submit"
+              className="commit-button"
+              onClick={this.onSave}
+              disabled={!buttonEnabled}
+            >
+              {loading}
+              <span title={`Save Revision`}>
+                {loading ? 'Saving Revision' : 'Save Revision'}
+              </span>
+            </Button>
           </div>
         </div>
       </div>
