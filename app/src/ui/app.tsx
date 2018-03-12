@@ -764,7 +764,9 @@ export class App extends React.Component<IAppProps, IAppState> {
     const state = selection.state
     const remoteUrl = state.remote ? state.remote.url: null
     if(remoteUrl){
-      return(remoteUrl.replace('projects.', ''))
+      let splitUrl = remoteUrl.split('/')
+      splitUrl[4] = splitUrl[4].replace("%20", "-")
+      return(splitUrl.join('/').replace('projects.', ''))
     }
     return null
   }
