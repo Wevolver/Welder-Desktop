@@ -5,7 +5,10 @@ import {
   gitNetworkArguments,
 } from './core'
 import { Repository } from '../../models/repository'
+import { stageFiles } from './update-index'
+import { unstageAll } from './reset'
 import { PullProgressParser, executionOptionsWithProgress } from '../progress'
+import { WorkingDirectoryFileChange } from '../../models/status'
 import { IPullProgress } from '../app-state'
 import {
   IGitAccount,
@@ -30,12 +33,17 @@ export async function pull(
   repository: Repository,
   account: IGitAccount | null,
   remote: string,
-  progressCallback?: (progress: IPullProgress) => void
+  files: ReadonlyArray<WorkingDirectoryFileChange>,
+  progressCallback?: (progress: IPullProgress) => void,
 ): Promise<void> {
   let opts: IGitExecutionOptions = {
     env: envForAuthentication(account),
     expectedErrors: AuthenticationErrors,
   }
+
+  await unstageAll(repository)
+
+  await stageFiles(repository, files)
 
   if (progressCallback) {
     const title = `Pulling ${remote}`
@@ -69,8 +77,33 @@ export async function pull(
   }
 
   const args = progressCallback
-    ? [...gitNetworkArguments, 'pull', '--no-rebase', '--progress', remote]
-    : [...gitNetworkArguments, 'pull', '--no-rebase', remote]
+    ? [...gitNetworkArguments, 'pull', '--no-rebase', '--progress', '-Xtheirs', remote]
+    : [...gitNetworkArguments, 'pull', '--no-rebase', '-Xtheirs', remote]
+
+  try {
+    await git(['commit', '-F', '-'], repository.path, 'createCommit', {
+      stdin: '\`Get Latest Changes\` automatic merge',
+    })
+  } catch (e) {
+    // Commit failures could come from a pre-commit hook rejection. So display
+    // a bit more context than we otherwise would.
+    const exitCode = e.result.exitCode
+
+
+    if (e instanceof GitError && exitCode !== 1) {
+      const output = e.result.stderr.trim()
+
+      let standardError = ''
+      if (output.length > 0) {
+        standardError = `, with output: '${output}'`
+      }
+      const error = new Error(
+        `Commit failed - exit code ${exitCode} received${standardError}`
+      )
+      error.name = 'commit-failed'
+      throw error
+    }
+  }
 
   const result = await git(args, repository.path, 'pull', opts)
 

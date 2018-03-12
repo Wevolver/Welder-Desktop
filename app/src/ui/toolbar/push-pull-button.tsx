@@ -133,10 +133,10 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
     const { ahead, behind } = this.props.aheadBehind
     const actionName = (function() {
       if (behind > 0) {
-        return 'Pull'
+        return 'Get Latest Changes'
       }
       if (ahead > 0) {
-        return 'Push'
+        return 'Sync Changes'
       }
       return 'Sync'
     })()
@@ -185,7 +185,7 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
     if (!this.props.aheadBehind) {
       const isGitHub = !!this.props.repository.gitHubRepository
       return isGitHub
-        ? 'Publish this branch to GitHub'
+        ? 'Publish this branch to Wevolver'
         : 'Publish this branch to the remote'
     }
 
