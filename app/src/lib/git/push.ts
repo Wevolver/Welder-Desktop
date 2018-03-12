@@ -98,4 +98,5 @@ export async function push(
   if (result.gitErrorDescription) {
     throw new GitError(result, args)
   }
+
 }
