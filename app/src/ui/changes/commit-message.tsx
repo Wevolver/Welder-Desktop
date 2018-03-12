@@ -217,7 +217,7 @@ export class CommitMessage extends React.Component<
   // }
 
   private onSubmit = () => {
-    this.createCommit()
+    this.getLatestChanges()
   }
 
   private getCoAuthorTrailers() {
@@ -249,6 +249,18 @@ export class CommitMessage extends React.Component<
     if (commitCreated) {
       this.clearCommitMessage()
     }
+  }
+
+   private async getLatestChanges() {
+
+    const selection = this.props.appStore.getState().selectedState
+
+    if (!selection || selection.type !== SelectionType.Repository) {
+      return
+    }
+
+    this.props.dispatcher.pull(selection.repository)
+
   }
 
   private canCommit(): boolean {
@@ -309,7 +321,7 @@ export class CommitMessage extends React.Component<
   }
 
   public render() {
-    const buttonEnabled = this.canCommit() && !this.props.isCommitting
+    const buttonEnabled = true // this.canCommit() && !this.props.isCommitting
     const loading = this.props.isCommitting ? <Loading /> : undefined
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
@@ -336,22 +348,22 @@ export class CommitMessage extends React.Component<
         </div>
 
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <div style={{ width: '49%'}}>
-        <Button
-          type="submit"
-          className="commit-button"
-          onClick={this.onSubmit}
-          disabled={!buttonEnabled}
-        >
-          {loading}
-          <span title={`Save Revision`}>
-            {loading ? 'Saving' : 'Save Revision'}
-          </span>
-        </Button>
-        </div>
-        <div style={{ width: '49%'}}>
-        {this.renderPushPullToolbarButton()}
-        </div>
+          <div style={{ width: '49%'}}>
+            <Button
+              type="submit"
+              className="commit-button"
+              onClick={this.onSubmit}
+              disabled={!buttonEnabled}
+            >
+              {loading}
+              <span title={`Get Latest Changes`}>
+                {loading ? 'Saving' : 'Get Latest Changes'}
+              </span>
+            </Button>
+          </div>
+          <div style={{ width: '49%'}}>
+            {this.renderPushPullToolbarButton()}
+          </div>
         </div>
       </div>
     )
