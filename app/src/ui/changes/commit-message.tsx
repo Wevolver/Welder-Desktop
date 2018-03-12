@@ -15,7 +15,7 @@ import { Button } from '../lib/button'
 import { Loading } from '../lib/loading'
 import { structuralEquals } from '../../lib/equality'
 import { ITrailer } from '../../lib/git/interpret-trailers'
-import { IAuthor } from '../../models/author'
+// import { IAuthor } from '../../models/author'
 import { AppStore } from '../../lib/stores'
 import { SelectionType } from '../../lib/app-state'
 
@@ -51,7 +51,7 @@ interface ICommitMessageProps {
    * Co-Authored-By commit message trailers depending on whether
    * the user has chosen to do so.
    */
-  readonly coAuthors: ReadonlyArray<IAuthor>
+  // readonly coAuthors: ReadonlyArray<IAuthor>
 }
 
 interface ICommitMessageState {
@@ -222,14 +222,7 @@ export class CommitMessage extends React.Component<
   }
 
   private getCoAuthorTrailers() {
-    if (!this.isCoAuthorInputEnabled) {
-      return []
-    }
-
-    return this.props.coAuthors.map(a => ({
-      token: 'Co-Authored-By',
-      value: `${a.name} <${a.email}>`,
-    }))
+    return []
   }
 
   private async createCommit() {
