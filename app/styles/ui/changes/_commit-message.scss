@@ -184,4 +184,7 @@
       @include ellipsis;
     }
   }
+  .aligned-left {
+    justify-content: flex-start;
+  }
 }

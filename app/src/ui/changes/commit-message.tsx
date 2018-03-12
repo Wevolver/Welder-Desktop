@@ -57,7 +57,7 @@ interface ICommitMessageProps {
 interface ICommitMessageState {
   readonly summary: string
   readonly description: string | null
-
+  readonly getLatestEnabled: boolean
   /** The last contextual commit message we've received. */
   readonly lastContextualCommitMessage: ICommitMessage | null
 
@@ -98,6 +98,7 @@ export class CommitMessage extends React.Component<
     this.state = {
       summary: '',
       description: '',
+      getLatestEnabled: true,
       lastContextualCommitMessage: null,
       userAutocompletionProvider: findUserAutoCompleteProvider(
         props.autocompletionProviders
@@ -251,16 +252,17 @@ export class CommitMessage extends React.Component<
     }
   }
 
-   private async getLatestChanges() {
-
+  private async getLatestChanges() {
+    this.setState({getLatestEnabled: false})
     const selection = this.props.appStore.getState().selectedState
 
     if (!selection || selection.type !== SelectionType.Repository) {
       return
     }
 
-    this.props.dispatcher.pull(selection.repository)
-
+    await this.props.dispatcher.pull(selection.repository)
+    this.clearCommitMessage()
+     this.setState({getLatestEnabled: true})
   }
 
   private canCommit(): boolean {
@@ -321,8 +323,8 @@ export class CommitMessage extends React.Component<
   }
 
   public render() {
-    const buttonEnabled = true // this.canCommit() && !this.props.isCommitting
-    const loading = this.props.isCommitting ? <Loading /> : undefined
+    const buttonEnabled = this.state.getLatestEnabled // this.canCommit() && !this.props.isCommitting
+    const loading = !buttonEnabled ? <Loading /> : undefined
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
     })
@@ -351,13 +353,13 @@ export class CommitMessage extends React.Component<
           <div style={{ width: '49%'}}>
             <Button
               type="submit"
-              className="commit-button"
+              className={loading ? "commit-button  aligned-left" : "commit-button"}
               onClick={this.onSubmit}
               disabled={!buttonEnabled}
             >
               {loading}
-              <span title={`Get Latest Changes`}>
-                {loading ? 'Saving' : 'Get Latest Changes'}
+              <span title={`Get Latest Changes`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
+                {loading ? <span>Saving revision &amp;<br /> getting latest revisions...</span> : 'Get Latest Changes'}
               </span>
             </Button>
           </div>
