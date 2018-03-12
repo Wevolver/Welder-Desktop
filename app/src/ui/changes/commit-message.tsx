@@ -289,6 +289,7 @@ export class CommitMessage extends React.Component<
     const buttonEnabled = this.state.getLatestEnabled // this.canCommit() && !this.props.isCommitting
     const buttonTwoEnabled = this.state.saveRevisionEnabled && this.canCommit()
     const loading = !buttonEnabled ? <Loading /> : undefined
+    const loadingTwo = !this.state.saveRevisionEnabled ? <Loading /> : undefined
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
     })
@@ -330,13 +331,13 @@ export class CommitMessage extends React.Component<
           <div style={{ width: '49%'}}>
             <Button
               type="submit"
-              className="commit-button"
+              className={loadingTwo ? "commit-button  aligned-left" : "commit-button"}
               onClick={this.onSave}
               disabled={!buttonTwoEnabled}
             >
-              {loading}
-              <span title={`Save Revision`}>
-                {loading ? 'Saving Revision' : 'Save Revision'}
+              {loadingTwo}
+              <span title={`Save Revision`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
+                {loadingTwo ? 'Saving Revision...' : 'Save Revision'}
               </span>
             </Button>
           </div>
