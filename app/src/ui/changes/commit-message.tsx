@@ -5,7 +5,6 @@ import {
   IAutocompletionProvider,
   UserAutocompletionProvider,
 } from '../autocompletion'
-import { PushPullButton } from '../toolbar'
 import { CommitIdentity } from '../../models/commit-identity'
 import { ICommitMessage } from '../../lib/app-state'
 import { Dispatcher } from '../../lib/dispatcher'
@@ -245,6 +244,10 @@ export class CommitMessage extends React.Component<
     }
   }
 
+  private onSave = () => {
+    this.createCommit()
+  }
+
   private async getLatestChanges() {
     this.setState({getLatestEnabled: false})
     const selection = this.props.appStore.getState().selectedState
@@ -278,41 +281,11 @@ export class CommitMessage extends React.Component<
     return this.props.repository.gitHubRepository !== null
   }
 
-  private get isCoAuthorInputVisible() {
-    return this.props.showCoAuthoredBy && this.isCoAuthorInputEnabled
-  }
-
   /**
    * Whether or not there's anything to render in the action bar
    */
   private get isActionBarEnabled() {
     return this.isCoAuthorInputEnabled
-  }
-
-  private renderPushPullToolbarButton() {
-    const selection = this.props.appStore.getState().selectedState
-    // const selection = this.state.selectedState
-    if (!selection || selection.type !== SelectionType.Repository) {
-      return null
-    }
-
-    const state = selection.state
-    const remoteName = state.remote ? state.remote.name : null
-    const progress = state.pushPullFetchProgress
-
-    const tipState = state.branchesState.tip.kind
-    return (
-      <PushPullButton
-        dispatcher={this.props.dispatcher}
-        repository={selection.repository}
-        aheadBehind={state.aheadBehind}
-        remoteName={remoteName}
-        lastFetched={state.lastFetched}
-        networkActionInProgress={state.isPushPullFetchInProgress}
-        progress={progress}
-        tipState={tipState}
-      />
-    )
   }
 
   public render() {
@@ -357,7 +330,17 @@ export class CommitMessage extends React.Component<
             </Button>
           </div>
           <div style={{ width: '49%'}}>
-            {this.renderPushPullToolbarButton()}
+            <Button
+              type="submit"
+              className="commit-button"
+              onClick={this.onSave}
+              disabled={!buttonEnabled}
+            >
+              {loading}
+              <span title={`Save Revision`}>
+                {loading ? 'Saving Revision' : 'Save Revision'}
+              </span>
+            </Button>
           </div>
         </div>
       </div>
