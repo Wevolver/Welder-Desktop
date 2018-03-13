@@ -310,7 +310,7 @@ export class CommitMessage extends React.Component<
             value={this.state.summary}
             onValueChanged={this.onSummaryChanged}
             autocompletionProviders={this.props.autocompletionProviders}
-            disabled={this.props.isCommitting}
+            disabled={this.props.isCommitting || !this.props.anyFilesSelected}
           />
         </div>
 
@@ -324,7 +324,7 @@ export class CommitMessage extends React.Component<
             >
               {loading}
               <span title={`Get Latest Changes`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
-                {loading ? <span>Saving revision &amp;<br /> getting latest revisions...</span> : 'Get Latest Changes'}
+                {loading ? <span>{this.props.anyFilesSelected && <span>Saving revision &amp;<br /></span>} Getting latest revisions...</span> : 'Get Latest Changes'}
               </span>
             </Button>
           </div>
