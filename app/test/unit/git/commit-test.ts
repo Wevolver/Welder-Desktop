@@ -58,7 +58,7 @@ describe('git/commit', () => {
       let files = status.workingDirectory.files
       expect(files.length).to.equal(1)
 
-      await createCommit(repository!, 'Special commit', files)
+      await createCommit(repository!, 'Special commit', files, null)
 
       status = await getStatus(repository!)
       files = status.workingDirectory.files
@@ -80,7 +80,7 @@ describe('git/commit', () => {
 
 # this is a comment`
 
-      await createCommit(repository!, message, files)
+      await createCommit(repository!, message, files, null)
 
       const commit = await getCommit(repository!, 'HEAD')
       expect(commit).to.not.be.null
@@ -107,7 +107,8 @@ describe('git/commit', () => {
       await createCommit(
         repo,
         'added two files\n\nthis is a description',
-        allChanges
+        allChanges,
+        null
       )
 
       const statusAfter = await getStatus(repo)
@@ -137,7 +138,7 @@ describe('git/commit', () => {
 
       await createCommit(repo, 'renamed a file', [
         files[0].withIncludeAll(true),
-      ])
+      ], null)
 
       const statusAfter = await getStatus(repo)
 
@@ -168,7 +169,7 @@ describe('git/commit', () => {
       )
 
       // commit just this change, ignore everything else
-      await createCommit(repository!, 'title', [file])
+      await createCommit(repository!, 'title', [file], null)
 
       // verify that the HEAD of the repository has moved
       const newTip = (await getCommits(repository!, 'HEAD', 1))[0]
@@ -219,7 +220,7 @@ describe('git/commit', () => {
       const updatedFile = file.withSelection(selection)
 
       // commit just this change, ignore everything else
-      await createCommit(repository!, 'title', [updatedFile])
+      await createCommit(repository!, 'title', [updatedFile], null)
 
       // verify that the HEAD of the repository has moved
       const newTip = (await getCommits(repository!, 'HEAD', 1))[0]
@@ -272,7 +273,7 @@ describe('git/commit', () => {
       )
 
       // commit just this change, ignore everything else
-      await createCommit(repository!, 'title', [file])
+      await createCommit(repository!, 'title', [file], null)
 
       // verify that the HEAD of the repository has moved
       const newTip = (await getCommits(repository!, 'HEAD', 1))[0]
@@ -316,7 +317,7 @@ describe('git/commit', () => {
       )
 
       // commit just this change, ignore everything else
-      await createCommit(repository!, 'title', [updatedFile])
+      await createCommit(repository!, 'title', [updatedFile], null)
 
       // verify that the HEAD of the repository has moved
       const newTip = (await getCommits(repository!, 'HEAD', 1))[0]
@@ -356,7 +357,7 @@ describe('git/commit', () => {
       )
 
       // commit just this change, ignore everything else
-      await createCommit(repository!, 'title', [file])
+      await createCommit(repository!, 'title', [file], null)
 
       // verify that the HEAD of the repository has moved
       const newTip = (await getCommits(repository!, 'HEAD', 1))[0]
@@ -398,7 +399,7 @@ describe('git/commit', () => {
 
       await createCommit(repo, 'renamed a file', [
         files[0].withIncludeAll(true),
-      ])
+      ], null)
 
       const statusAfter = await getStatus(repo)
 
@@ -432,7 +433,7 @@ describe('git/commit', () => {
 
       const partiallySelectedFile = files[0].withSelection(selection)
 
-      await createCommit(repo, 'renamed a file', [partiallySelectedFile])
+      await createCommit(repo, 'renamed a file', [partiallySelectedFile], null)
 
       const statusAfter = await getStatus(repo)
 
@@ -468,7 +469,7 @@ describe('git/commit', () => {
 
       const selection = files[0].selection.withSelectAll()
       const selectedFile = files[0].withSelection(selection)
-      await createCommit(repo, 'Merge commit!', [selectedFile])
+      await createCommit(repo, 'Merge commit!', [selectedFile], null)
 
       const commits = await getCommits(repo, 'HEAD', 5)
       expect(commits[0].parentSHAs.length).to.equal(2)
@@ -501,7 +502,7 @@ describe('git/commit', () => {
 
       const toCommit = status.workingDirectory.withIncludeAllFiles(true)
 
-      await createCommit(repo, 'commit everything', toCommit.files)
+      await createCommit(repo, 'commit everything', toCommit.files, null)
 
       status = await getStatus(repo)
       files = status.workingDirectory.files
@@ -537,7 +538,7 @@ describe('git/commit', () => {
 
       const toCommit = status.workingDirectory.withIncludeAllFiles(true)
 
-      await createCommit(repo, 'commit again!', toCommit.files)
+      await createCommit(repo, 'commit again!', toCommit.files, null)
 
       status = await getStatus(repo)
       files = status.workingDirectory.files

@@ -161,7 +161,7 @@
   .commit-button {
     max-width: 100%;
     width: 100%;
-    height: 100%;
+    height: 50px;
     // margin-top: var(--spacing);
     display: flex;
     justify-content: center;
@@ -183,5 +183,8 @@
     > span {
       @include ellipsis;
     }
+  }
+  .aligned-left {
+    justify-content: flex-start;
   }
 }
