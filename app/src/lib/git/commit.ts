@@ -20,6 +20,8 @@ export async function createCommit(
     await git(['commit', '-F', '-'], repository.path, 'createCommit', {
       stdin: message,
     })
+    await git(['pull', '-srecursive', '-Xours'], repository.path, 'pull')
+    await git(['push'], repository.path, 'push')
     return true
   } catch (e) {
     // Commit failures could come from a pre-commit hook rejection. So display

@@ -5,7 +5,6 @@ import {
   IAutocompletionProvider,
   UserAutocompletionProvider,
 } from '../autocompletion'
-import { PushPullButton } from '../toolbar'
 import { CommitIdentity } from '../../models/commit-identity'
 import { ICommitMessage } from '../../lib/app-state'
 import { Dispatcher } from '../../lib/dispatcher'
@@ -15,7 +14,7 @@ import { Button } from '../lib/button'
 import { Loading } from '../lib/loading'
 import { structuralEquals } from '../../lib/equality'
 import { ITrailer } from '../../lib/git/interpret-trailers'
-import { IAuthor } from '../../models/author'
+// import { IAuthor } from '../../models/author'
 import { AppStore } from '../../lib/stores'
 import { SelectionType } from '../../lib/app-state'
 
@@ -51,13 +50,13 @@ interface ICommitMessageProps {
    * Co-Authored-By commit message trailers depending on whether
    * the user has chosen to do so.
    */
-  readonly coAuthors: ReadonlyArray<IAuthor>
+  // readonly coAuthors: ReadonlyArray<IAuthor>
 }
 
 interface ICommitMessageState {
   readonly summary: string
   readonly description: string | null
-
+  readonly getLatestEnabled: boolean
   /** The last contextual commit message we've received. */
   readonly lastContextualCommitMessage: ICommitMessage | null
 
@@ -98,6 +97,7 @@ export class CommitMessage extends React.Component<
     this.state = {
       summary: '',
       description: '',
+      getLatestEnabled: true,
       lastContextualCommitMessage: null,
       userAutocompletionProvider: findUserAutoCompleteProvider(
         props.autocompletionProviders
@@ -217,18 +217,11 @@ export class CommitMessage extends React.Component<
   // }
 
   private onSubmit = () => {
-    this.createCommit()
+    this.getLatestChanges()
   }
 
   private getCoAuthorTrailers() {
-    if (!this.isCoAuthorInputEnabled) {
-      return []
-    }
-
-    return this.props.coAuthors.map(a => ({
-      token: 'Co-Authored-By',
-      value: `${a.name} <${a.email}>`,
-    }))
+    return []
   }
 
   private async createCommit() {
@@ -251,6 +244,23 @@ export class CommitMessage extends React.Component<
     }
   }
 
+  private onSave = () => {
+    this.createCommit()
+  }
+
+  private async getLatestChanges() {
+    this.setState({getLatestEnabled: false})
+    const selection = this.props.appStore.getState().selectedState
+
+    if (!selection || selection.type !== SelectionType.Repository) {
+      return
+    }
+
+    await this.props.dispatcher.pull(selection.repository)
+    this.clearCommitMessage()
+     this.setState({getLatestEnabled: true})
+  }
+
   private canCommit(): boolean {
     return this.props.anyFilesSelected && this.state.summary.length > 0
   }
@@ -271,10 +281,6 @@ export class CommitMessage extends React.Component<
     return this.props.repository.gitHubRepository !== null
   }
 
-  private get isCoAuthorInputVisible() {
-    return this.props.showCoAuthoredBy && this.isCoAuthorInputEnabled
-  }
-
   /**
    * Whether or not there's anything to render in the action bar
    */
@@ -282,35 +288,9 @@ export class CommitMessage extends React.Component<
     return this.isCoAuthorInputEnabled
   }
 
-  private renderPushPullToolbarButton() {
-    const selection = this.props.appStore.getState().selectedState
-    // const selection = this.state.selectedState
-    if (!selection || selection.type !== SelectionType.Repository) {
-      return null
-    }
-
-    const state = selection.state
-    const remoteName = state.remote ? state.remote.name : null
-    const progress = state.pushPullFetchProgress
-
-    const tipState = state.branchesState.tip.kind
-    return (
-      <PushPullButton
-        dispatcher={this.props.dispatcher}
-        repository={selection.repository}
-        aheadBehind={state.aheadBehind}
-        remoteName={remoteName}
-        lastFetched={state.lastFetched}
-        networkActionInProgress={state.isPushPullFetchInProgress}
-        progress={progress}
-        tipState={tipState}
-      />
-    )
-  }
-
   public render() {
-    const buttonEnabled = this.canCommit() && !this.props.isCommitting
-    const loading = this.props.isCommitting ? <Loading /> : undefined
+    const buttonEnabled = this.state.getLatestEnabled // this.canCommit() && !this.props.isCommitting
+    const loading = !buttonEnabled ? <Loading /> : undefined
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
     })
@@ -336,22 +316,32 @@ export class CommitMessage extends React.Component<
         </div>
 
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-        <div style={{ width: '49%'}}>
-        <Button
-          type="submit"
-          className="commit-button"
-          onClick={this.onSubmit}
-          disabled={!buttonEnabled}
-        >
-          {loading}
-          <span title={`Save Revision`}>
-            {loading ? 'Saving' : 'Save Revision'}
-          </span>
-        </Button>
-        </div>
-        <div style={{ width: '49%'}}>
-        {this.renderPushPullToolbarButton()}
-        </div>
+          <div style={{ width: '49%'}}>
+            <Button
+              type="submit"
+              className={loading ? "commit-button  aligned-left" : "commit-button"}
+              onClick={this.onSubmit}
+              disabled={!buttonEnabled}
+            >
+              {loading}
+              <span title={`Get Latest Changes`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
+                {loading ? <span>Saving revision &amp;<br /> getting latest revisions...</span> : 'Get Latest Changes'}
+              </span>
+            </Button>
+          </div>
+          <div style={{ width: '49%'}}>
+            <Button
+              type="submit"
+              className="commit-button"
+              onClick={this.onSave}
+              disabled={!buttonEnabled}
+            >
+              {loading}
+              <span title={`Save Revision`}>
+                {loading ? 'Saving Revision' : 'Save Revision'}
+              </span>
+            </Button>
+          </div>
         </div>
       </div>
     )

@@ -2056,6 +2056,13 @@ export class AppStore extends TypedBaseStore<IAppState> {
     account: IGitAccount | null
   ): Promise<void> {
     return this.withPushPull(repository, async () => {
+      const state = this.getRepositoryState(repository)
+      const files = state.changesState.workingDirectory.files
+      const selectedFiles = files.filter(file => {
+        return file.selection.getSelectionType() !== DiffSelectionType.None
+      })
+
+
       const gitStore = this.getGitStore(repository)
       const remote = gitStore.remote
 
@@ -2063,7 +2070,6 @@ export class AppStore extends TypedBaseStore<IAppState> {
         throw new Error('The repository has no remotes.')
       }
 
-      const state = this.getRepositoryState(repository)
       const tip = state.branchesState.tip
 
       if (tip.kind === TipState.Unborn) {
@@ -2114,7 +2120,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
           }
           await gitStore.performFailableOperation(
             () =>
-              pullRepo(repository, account, remote.name, progress => {
+              pullRepo(repository, account, remote.name, selectedFiles, progress => {
                 this.updatePushPullFetchProgress(repository, {
                   ...progress,
                   value: progress.value * pullWeight,

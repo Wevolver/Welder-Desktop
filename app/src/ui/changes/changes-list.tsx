@@ -16,7 +16,6 @@ import { Dispatcher } from '../../lib/dispatcher'
 import { IAutocompletionProvider } from '../autocompletion'
 import { Repository } from '../../models/repository'
 import { showContextualMenu, IMenuItem } from '../main-process-proxy'
-import { IAuthor } from '../../models/author'
 import { ITrailer } from '../../lib/git/interpret-trailers'
 import { AppStore } from '../../lib/stores'
 
@@ -86,7 +85,6 @@ interface IChangesListProps {
    * Co-Authored-By commit message trailers depending on whether
    * the user has chosen to do so.
    */
-  readonly coAuthors: ReadonlyArray<IAuthor>
 }
 
 export class ChangesList extends React.Component<IChangesListProps, {}> {
@@ -207,7 +205,6 @@ export class ChangesList extends React.Component<IChangesListProps, {}> {
           autocompletionProviders={this.props.autocompletionProviders}
           isCommitting={this.props.isCommitting}
           showCoAuthoredBy={this.props.showCoAuthoredBy}
-          coAuthors={this.props.coAuthors}
         />
       </div>
     )
