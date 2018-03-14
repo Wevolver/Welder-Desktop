@@ -133,7 +133,7 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
     const { ahead, behind } = this.props.aheadBehind
     const actionName = (function() {
       if (behind > 0) {
-        return 'Get Latest Changes'
+        return 'Get Latest Revisions'
       }
       if (ahead > 0) {
         return 'Sync Changes'

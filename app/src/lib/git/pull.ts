@@ -82,7 +82,7 @@ export async function pull(
 
   try {
     await git(['commit', '-F', '-'], repository.path, 'createCommit', {
-      stdin: '\`Get Latest Changes\` automatic merge',
+      stdin: '\`Get Latest Revisions\` automatic merge',
     })
   } catch (e) {
     // Commit failures could come from a pre-commit hook rejection. So display
