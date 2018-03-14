@@ -286,10 +286,13 @@ export class CommitMessage extends React.Component<
   }
 
   public render() {
-    const buttonEnabled = this.state.getLatestEnabled // this.canCommit() && !this.props.isCommitting
-    const buttonTwoEnabled = this.state.saveRevisionEnabled && this.canCommit()
-    const loading = !buttonEnabled ? <Loading /> : undefined
+
+    const loading = !this.state.getLatestEnabled ? <Loading /> : undefined
     const loadingTwo = !this.state.saveRevisionEnabled ? <Loading /> : undefined
+
+    const buttonEnabled = this.state.getLatestEnabled && !loadingTwo
+    const buttonTwoEnabled = this.state.saveRevisionEnabled && this.canCommit() && !loading
+
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
     })
