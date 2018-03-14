@@ -1392,16 +1392,23 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     const gitStore = this.getGitStore(repository)
 
+    const retryAction: RetryAction = {
+      type: RetryActionType.Fetch,
+      repository,
+    }
+
+    const message = await formatCommitMessage(
+      repository,
+      summary,
+      description,
+      trailers
+    )
+
     const result = await this.isCommitting(repository, () => {
-      return gitStore.performFailableOperation(async () => {
-        const message = await formatCommitMessage(
-          repository,
-          summary,
-          description,
-          trailers
-        )
-        return createCommit(repository, message, selectedFiles, account)
-      })
+      return gitStore.performFailableOperation(() =>
+        createCommit(repository, message, selectedFiles, account),
+        { retryAction }
+      )
     })
 
     if (result) {
