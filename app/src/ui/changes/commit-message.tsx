@@ -57,6 +57,7 @@ interface ICommitMessageState {
   readonly summary: string
   readonly description: string | null
   readonly getLatestEnabled: boolean
+  readonly saveRevisionEnabled: boolean
   /** The last contextual commit message we've received. */
   readonly lastContextualCommitMessage: ICommitMessage | null
 
@@ -98,6 +99,7 @@ export class CommitMessage extends React.Component<
       summary: '',
       description: '',
       getLatestEnabled: true,
+      saveRevisionEnabled: true,
       lastContextualCommitMessage: null,
       userAutocompletionProvider: findUserAutoCompleteProvider(
         props.autocompletionProviders
@@ -220,28 +222,23 @@ export class CommitMessage extends React.Component<
     this.getLatestChanges()
   }
 
-  private getCoAuthorTrailers() {
-    return []
-  }
-
   private async createCommit() {
     const { summary, description } = this.state
-
+   
     if (!this.canCommit()) {
       return
     }
-
-    const trailers = this.getCoAuthorTrailers()
+    this.setState({saveRevisionEnabled: false})
 
     const commitCreated = await this.props.onCreateCommit(
       summary,
-      description,
-      trailers
+      description
     )
 
     if (commitCreated) {
       this.clearCommitMessage()
     }
+    this.setState({saveRevisionEnabled: true})
   }
 
   private onSave = () => {
@@ -258,7 +255,7 @@ export class CommitMessage extends React.Component<
 
     await this.props.dispatcher.pull(selection.repository)
     this.clearCommitMessage()
-     this.setState({getLatestEnabled: true})
+    this.setState({getLatestEnabled: true})
   }
 
   private canCommit(): boolean {
@@ -290,7 +287,9 @@ export class CommitMessage extends React.Component<
 
   public render() {
     const buttonEnabled = this.state.getLatestEnabled // this.canCommit() && !this.props.isCommitting
+    const buttonTwoEnabled = this.state.saveRevisionEnabled && this.canCommit()
     const loading = !buttonEnabled ? <Loading /> : undefined
+    const loadingTwo = !this.state.saveRevisionEnabled ? <Loading /> : undefined
     const className = classNames({
       'with-action-bar': this.isActionBarEnabled
     })
@@ -311,7 +310,7 @@ export class CommitMessage extends React.Component<
             value={this.state.summary}
             onValueChanged={this.onSummaryChanged}
             autocompletionProviders={this.props.autocompletionProviders}
-            disabled={this.props.isCommitting}
+            disabled={this.props.isCommitting || !this.props.anyFilesSelected}
           />
         </div>
 
@@ -325,20 +324,20 @@ export class CommitMessage extends React.Component<
             >
               {loading}
               <span title={`Get Latest Changes`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
-                {loading ? <span>Saving revision &amp;<br /> getting latest revisions...</span> : 'Get Latest Changes'}
+                {loading ? <span>{this.props.anyFilesSelected && <span>Saving revision &amp;<br /></span>} Getting latest revisions...</span> : 'Get Latest Changes'}
               </span>
             </Button>
           </div>
           <div style={{ width: '49%'}}>
             <Button
               type="submit"
-              className="commit-button"
+              className={loadingTwo ? "commit-button  aligned-left" : "commit-button"}
               onClick={this.onSave}
-              disabled={!buttonEnabled}
+              disabled={!buttonTwoEnabled}
             >
-              {loading}
-              <span title={`Save Revision`}>
-                {loading ? 'Saving Revision' : 'Save Revision'}
+              {loadingTwo}
+              <span title={`Save Revision`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
+                {loadingTwo ? 'Saving Revision...' : 'Save Revision'}
               </span>
             </Button>
           </div>

@@ -1364,12 +1364,25 @@ export class AppStore extends TypedBaseStore<IAppState> {
     this.emitUpdate()
   }
 
-  /** This shouldn't be called directly. See `Dispatcher`. */
   public async _commitIncludedChanges(
     repository: Repository,
     summary: string,
     description: string | null,
     trailers?: ReadonlyArray<ITrailer>
+  ): Promise<boolean> {
+    return this.withAuthenticatingUser(repository, (repository, account) => {
+      return this.performCommitIncludedChanges(repository, summary, description, account)
+    })
+  }
+
+
+  /** This shouldn't be called directly. See `Dispatcher`. */
+  public async performCommitIncludedChanges(
+    repository: Repository,
+    summary: string,
+    description: string | null,
+    account: IGitAccount | null,
+    trailers?: ReadonlyArray<ITrailer>,
   ): Promise<boolean> {
     const state = this.getRepositoryState(repository)
     const files = state.changesState.workingDirectory.files
@@ -1387,7 +1400,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
           description,
           trailers
         )
-        return createCommit(repository, message, selectedFiles)
+        return createCommit(repository, message, selectedFiles, account)
       })
     })
 
