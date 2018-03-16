@@ -290,7 +290,7 @@ export class CommitMessage extends React.Component<
     const loading = !this.state.getLatestEnabled ? <Loading /> : undefined
     const loadingTwo = !this.state.saveRevisionEnabled ? <Loading /> : undefined
 
-    const buttonEnabled = this.state.getLatestEnabled && !loadingTwo
+    const buttonEnabled = this.state.getLatestEnabled && !loadingTwo && !this.canCommit()
     const buttonTwoEnabled = this.state.saveRevisionEnabled && this.canCommit() && !loading
 
     const className = classNames({
