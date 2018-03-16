@@ -1021,6 +1021,10 @@ export class Dispatcher {
         await this.clone(retryAction.url, retryAction.path, retryAction.options)
         break
 
+      case RetryActionType.PullPush:
+        await this.pull(retryAction.repository)
+        return this.push(retryAction.repository)
+
       default:
         return assertNever(retryAction, `Unknown retry action: ${retryAction}`)
     }

@@ -20,10 +20,10 @@ export async function createCommit(
     expectedErrors: AuthenticationErrors,
   }
 
-  const resultFtech = await git([...gitNetworkArguments, 'fetch', '--prune', 'origin'], repository.path, 'fetch', opts)
-  if (resultFtech.gitErrorDescription) {
-    throw new GitError(resultFtech, [...gitNetworkArguments, 'fetch', '--prune', 'origin'])
-  }
+  // const resultFtech = await git([...gitNetworkArguments, 'fetch', '--prune', 'origin'], repository.path, 'fetch', opts)
+  // if (resultFtech.gitErrorDescription) {
+  //   throw new GitError(resultFtech, [...gitNetworkArguments, 'fetch', '--prune', 'origin'])
+  // }
 
   // Clear the staging area, our diffs reflect the difference between the
   // working directory and the last commit (if any) so our commits should

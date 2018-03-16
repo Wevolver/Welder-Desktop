@@ -1393,7 +1393,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     const gitStore = this.getGitStore(repository)
 
     const retryAction: RetryAction = {
-      type: RetryActionType.Fetch,
+      type: RetryActionType.PullPush,
       repository,
     }
 
