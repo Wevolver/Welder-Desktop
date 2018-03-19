@@ -327,7 +327,9 @@ export class CommitMessage extends React.Component<
             >
               {loading}
               <span title={`Get Latest Revisions`} style={{textAlign: 'left', marginLeft: 8, marginRight: 8}}>
-                {loading ? <span>{this.props.anyFilesSelected && <span>Saving revision &amp;<br /></span>} Getting latest revisions...</span> : 'Get Latest Revisions'}
+                {loading ? 
+                  <span>{this.props.anyFilesSelected && <span>Saving revision &amp;<br /></span>
+                } Getting latest revisions...</span> : (this.props.anyFilesSelected ? <span style={{textAlign: 'center'}}><div>Get Latest Revisions</div><div style={{fontSize: 11, opacity: 0.8}}>Your changes will be saved</div></span> : 'Get Latest Revisions')}
               </span>
             </Button>
           </div>
