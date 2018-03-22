@@ -1892,7 +1892,7 @@ export class AppStore extends TypedBaseStore<IAppState> {
     return this.withAuthenticatingUser(repository, (repository, account) => {
       return this.performPush(repository, account)
     })
-  }
+  } 
 
   private async performPush(
     repository: Repository,
