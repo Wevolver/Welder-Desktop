@@ -230,14 +230,17 @@ export class CommitMessage extends React.Component<
     }
     this.setState({saveRevisionEnabled: false})
 
-    const commitCreated = await this.props.onCreateCommit(
-      summary,
-      description
-    )
-
-    if (commitCreated) {
-      this.clearCommitMessage()
+    try {
+      await this.props.onCreateCommit(
+        summary,
+        description
+      )
+    } catch(e) {
+       this.clearCommitMessage()
+       this.setState({saveRevisionEnabled: true})
     }
+
+    this.clearCommitMessage()
     this.setState({saveRevisionEnabled: true})
   }
 
@@ -253,9 +256,14 @@ export class CommitMessage extends React.Component<
       return
     }
 
-    await this.props.dispatcher.pull(selection.repository)
-    this.clearCommitMessage()
-    this.setState({getLatestEnabled: true})
+    try {
+      await this.props.dispatcher.pull(selection.repository)
+      this.clearCommitMessage()
+      this.setState({getLatestEnabled: true})
+    } catch(e) {
+      this.clearCommitMessage()
+      this.setState({getLatestEnabled: true})
+    }
   }
 
   private canCommit(): boolean {
