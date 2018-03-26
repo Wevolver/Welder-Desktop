@@ -175,19 +175,19 @@ app.on('ready', () => {
 
   readyTime = now() - launchTime
 
-  setAsDefaultProtocolClient('x-wevovler-client')
+  setAsDefaultProtocolClient('x-wevolver-client')
 
   if (__DEV__) {
-    setAsDefaultProtocolClient('x-wevovler-desktop-dev-auth')
+    setAsDefaultProtocolClient('x-wevolver-desktop-dev-auth')
   } else {
-    setAsDefaultProtocolClient('x-wevovler-desktop-auth')
+    setAsDefaultProtocolClient('x-wevolver-desktop-auth')
   }
 
   // Also support Desktop Classic's protocols.
   if (__DARWIN__) {
-    setAsDefaultProtocolClient('wevovler-mac')
+    setAsDefaultProtocolClient('wevolver-mac')
   } else if (__WIN32__) {
-    setAsDefaultProtocolClient('wevovler-windows')
+    setAsDefaultProtocolClient('wevolver-windows')
   }
 
   createWindow()
