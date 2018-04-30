@@ -110,4 +110,9 @@ export async function pull(
   if (result.gitErrorDescription) {
     throw new GitError(result, args)
   }
+
+  const resultPush = await git([...gitNetworkArguments, 'push', 'origin', 'master'], repository.path, 'push', opts)
+  if (resultPush.gitErrorDescription) {
+    throw new GitError(resultPush, [...gitNetworkArguments, 'push', 'origin', 'master'])
+  }
 }
