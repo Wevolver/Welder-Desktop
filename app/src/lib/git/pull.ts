@@ -82,30 +82,23 @@ export async function pull(
 
   try {
     await git(['commit', '-F', '-'], repository.path, 'createCommit', {
-      stdin: '\`Get Latest Revisions\` automatic merge',
+      stdin: 'Got most recent revisions',
     })
   } catch (e) {
-    // Commit failures could come from a pre-commit hook rejection. So display
-    // a bit more context than we otherwise would.
     const exitCode = e.result.exitCode
 
-
     if (e instanceof GitError && exitCode !== 1) {
-      const output = e.result.stderr.trim()
-
-      let standardError = ''
-      if (output.length > 0) {
-        standardError = `, with output: '${output}'`
-      }
+      let standardError = e.result.stderr.trim()
       const error = new Error(
-        `Commit failed - exit code ${exitCode} received${standardError}`
+        `${standardError}`
       )
       error.name = 'commit-failed'
       throw error
     }
   }
 
-  const result = await git(args, repository.path, 'pull', opts)
+  await git([...gitNetworkArguments, 'fetch', 'origin'], repository.path, 'fetch', opts)
+  const result= await git([...gitNetworkArguments, 'merge', '-Xtheirs', '-m Saved previous revision on top of my changes', 'origin'], repository.path, 'merge', opts)
 
   if (result.gitErrorDescription) {
     throw new GitError(result, args)
