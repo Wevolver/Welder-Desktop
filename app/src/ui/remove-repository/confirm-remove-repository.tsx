@@ -34,19 +34,18 @@ export class ConfirmRemoveRepository extends React.Component<
         id="confirm-remove-repository"
         key="remove-repository-confirmation"
         type="warning"
-        title={__DARWIN__ ? 'Remove Repository' : 'Remove repository'}
+        title={__DARWIN__ ? 'Remove Project' : 'Remove project'}
         onDismissed={this.cancel}
         onSubmit={this.cancel}
       >
         <DialogContent>
           <p>
-            Are you sure you want to remove the repository "{
+            Are you sure you want to remove the project"{
               this.props.repository.name
             }"?
           </p>
           <p className="description">
-            The repository will be removed from GitHub Desktop but will remain
-            on disk.
+            The project will be removed from Wevolver Desktop, but the files will remain on your computer.
           </p>
         </DialogContent>
         <DialogFooter>
