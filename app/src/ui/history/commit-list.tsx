@@ -48,28 +48,20 @@ export class CommitList extends React.Component<ICommitListProps, {}> {
   }
 
   private onRowChanged = (row: number) => {
-    const sha = this.props.history[row]
-    const commit = this.props.commits.get(sha)
-    if (commit) {
-      this.props.onCommitChanged(commit)
-    }
+    // const sha = this.props.history[row]
+    console.log(row)
+    // const commit = this.props.commits.get(sha)
+    // if (commit) {
+    //   this.props.onCommitChanged(commit)
+    // }
   }
 
-  private onScroll = (scrollTop: number, clientHeight: number) => {
-    const numberOfRows = Math.ceil(clientHeight / RowHeight)
-    const top = Math.floor(scrollTop / RowHeight)
-    const bottom = top + numberOfRows
-    this.props.onScroll(top, bottom)
-  }
-
-  private rowForSHA(sha_: string | null): number {
-    const sha = sha_
-    if (!sha) {
-      return -1
-    }
-
-    return this.props.history.findIndex(s => s === sha)
-  }
+  // private onScroll = (scrollTop: number, clientHeight: number) => {
+  //   const numberOfRows = Math.ceil(clientHeight / RowHeight)
+  //   const top = Math.floor(scrollTop / RowHeight)
+  //   const bottom = top + numberOfRows
+  //   this.props.onScroll(top, bottom)
+  // }
 
   public render() {
     if (this.props.history.length === 0) {
@@ -81,10 +73,10 @@ export class CommitList extends React.Component<ICommitListProps, {}> {
         <List
           rowCount={this.props.history.length}
           rowHeight={RowHeight}
-          selectedRow={this.rowForSHA(this.props.selectedSHA)}
+          selectedRow={-1}
           rowRenderer={this.renderCommit}
           onSelectionChanged={this.onRowChanged}
-          onScroll={this.onScroll}
+          onScroll={() => {}}
           invalidationProps={{
             history: this.props.history,
             gitHubUsers: this.props.gitHubUsers,

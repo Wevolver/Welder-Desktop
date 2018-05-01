@@ -72,6 +72,7 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
   }
 
   public componentWillMount() {
+    console.log('WTF')
      this.onTabClicked(Tab.Changes, this.props)
      this.onTabClicked(Tab.History, this.props)
   }
@@ -169,10 +170,10 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
       <UiView id="sidebar">
         {this.renderTabs()}
         <UiView style={{position: 'relative'}}>
-        <UiView style={{width: '50%', left: 0, position: 'absolute', bottom: 0, top: 0}}>
+        <UiView style={{width: 'calc(50% + 1px)', left: 0, position: 'absolute', bottom: 0, top: 0, borderRight: '1px solid #24292e', zIndex: 2}}>
           {this.renderChangesSidebar()}
         </UiView>
-        <UiView style={{width: '50%', right: 0, position: 'absolute', bottom: 0, top:0}}>
+        <UiView style={{width: '50%', right: 0, position: 'absolute', bottom: 0, top:70, zIndex: 1, borderTop: '1px solid #e1e4e8'}}>
           {this.renderHistorySidebar()}
         </UiView>
         </UiView>

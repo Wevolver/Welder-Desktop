@@ -326,7 +326,7 @@ export class CommitMessage extends React.Component<
         </div>
 
         <div style={{display: 'flex', justifyContent: 'space-between'}}>
-          <div style={{ width: '49%'}}>
+          <div style={{ width: 'calc(100% - 20px)', marginRight: 10, position: 'absolute', top: 10, right: '-100%', zIndex: 10}}>
             <Button
               type="submit"
               className={loading ? "commit-button  aligned-left" : "commit-button"}
@@ -341,7 +341,7 @@ export class CommitMessage extends React.Component<
               </span>
             </Button>
           </div>
-          <div style={{ width: '49%'}}>
+          <div style={{ width: '100%'}}>
             <Button
               type="submit"
               className={loadingTwo ? "commit-button  aligned-left" : "commit-button"}
