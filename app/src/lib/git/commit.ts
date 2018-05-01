@@ -39,6 +39,7 @@ export async function createCommit(
   } catch (e) {
     // Commit failures could come from a pre-commit hook rejection. So display
     // a bit more context than we otherwise would.
+
     if (e instanceof GitError) {
       let standardError = e.result.stderr.trim()
       const error = new Error(

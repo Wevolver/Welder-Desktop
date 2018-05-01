@@ -15,7 +15,11 @@ export type RetryAction =
   | { type: RetryActionType.Push; repository: Repository }
   | { type: RetryActionType.Pull; repository: Repository }
   | { type: RetryActionType.Fetch; repository: Repository }
-  | { type: RetryActionType.PullPush; repository: Repository }
+  | { 
+      type: RetryActionType.PullPush
+      repository: Repository
+      message: string
+    }
   | {
       type: RetryActionType.Clone
       url: string
