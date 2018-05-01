@@ -53,8 +53,10 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
         ? Tab.Changes
         : Tab.History
 
+    // this.onTabClicked(Tab.Changes)
+    // this.onTabClicked(Tab.History)
     return (
-      <TabBar selectedIndex={selectedTab} onTabClicked={this.onTabClicked}>
+      <TabBar selectedIndex={selectedTab} onTabClicked={() => {}}>
         <span className="with-indicator">
           <span>Changes</span>
           {hasChanges ? (
@@ -69,6 +71,17 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
     )
   }
 
+  public componentWillMount() {
+     this.onTabClicked(Tab.Changes, this.props)
+     this.onTabClicked(Tab.History, this.props)
+  }
+
+  public componentWillReceiveProps(nextProps: IRepositoryProps) {
+    if(this.props.repository.name !== nextProps.repository.name) {
+      this.onTabClicked(Tab.Changes, nextProps)
+      this.onTabClicked(Tab.History, nextProps)
+    }
+  }
   private renderChangesSidebar(): JSX.Element {
     const tip = this.props.state.branchesState.tip
     const branch = tip.kind === TipState.Valid ? tip.branch : null
@@ -124,17 +137,17 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
     )
   }
 
-  private renderSidebarContents(): JSX.Element {
-    const selectedSection = this.props.state.selectedSection
+  // private renderSidebarContents(): JSX.Element {
+  //   const selectedSection = this.props.state.selectedSection
 
-    if (selectedSection === RepositorySection.Changes) {
-      return this.renderChangesSidebar()
-    } else if (selectedSection === RepositorySection.History) {
-      return this.renderHistorySidebar()
-    } else {
-      return assertNever(selectedSection, 'Unknown repository section')
-    }
-  }
+  //   if (selectedSection === RepositorySection.Changes) {
+  //     return this.renderChangesSidebar()
+  //   } else if (selectedSection === RepositorySection.History) {
+  //     return this.renderHistorySidebar()
+  //   } else {
+  //     return assertNever(selectedSection, 'Unknown repository section')
+  //   }
+  // }
 
   // private handleSidebarWidthReset = () => {
   //   this.props.dispatcher.resetSidebarWidth()
@@ -155,7 +168,14 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
       // >
       <UiView id="sidebar">
         {this.renderTabs()}
-        {this.renderSidebarContents()}
+        <UiView style={{position: 'relative'}}>
+        <UiView style={{width: '50%', left: 0, position: 'absolute', bottom: 0, top: 0}}>
+          {this.renderChangesSidebar()}
+        </UiView>
+        <UiView style={{width: '50%', right: 0, position: 'absolute', bottom: 0, top:0}}>
+          {this.renderHistorySidebar()}
+        </UiView>
+        </UiView>
       </UiView>
     )
   }
@@ -240,13 +260,13 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
     }
   }
 
-  private onTabClicked = (tab: Tab) => {
+  private onTabClicked = (tab: Tab, props: IRepositoryProps) => {
     const section =
       tab === Tab.History
         ? RepositorySection.History
         : RepositorySection.Changes
     this.props.dispatcher.changeRepositorySection(
-      this.props.repository,
+      props.repository,
       section
     )
   }
