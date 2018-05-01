@@ -125,6 +125,9 @@ export class CommitMessage extends React.Component<
   private receiveProps(nextProps: ICommitMessageProps, initializing: boolean) {
     // If we're switching away from one repository to another we'll persist
     // our commit message in the dispatcher.
+    if(!nextProps.isCommitting && this.props.isCommitting) {
+      this.clearCommitMessage()
+    }
     if (nextProps.repository.id !== this.props.repository.id) {
       this.props.dispatcher.setCommitMessage(this.props.repository, this.state)
     }
