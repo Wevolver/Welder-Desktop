@@ -169,11 +169,11 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
       // >
       <UiView id="sidebar">
         {this.renderTabs()}
-        <UiView style={{position: 'relative'}}>
-        <UiView style={{width: 'calc(50% + 1px)', left: 0, position: 'absolute', bottom: 0, top: 0, borderRight: '1px solid #24292e', zIndex: 2}}>
+        <UiView style={{position: 'relative', display: 'flex', flexDirection: 'row'}}>
+        <UiView style={{left: 0,  bottom: 0, top: 0, borderRight: '1px solid #24292e', zIndex: 2, flex: 1}}>
           {this.renderChangesSidebar()}
         </UiView>
-        <UiView style={{width: '50%', right: 0, position: 'absolute', bottom: 0, top:70, zIndex: 1, borderTop: '1px solid #e1e4e8'}}>
+        <UiView style={{ right: 0,  bottom: 0, top:70, zIndex: 1, borderTop: '1px solid #e1e4e8', flex: 1}}>
           {this.renderHistorySidebar()}
         </UiView>
         </UiView>
