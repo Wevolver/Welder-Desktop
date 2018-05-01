@@ -173,7 +173,7 @@ export class RepositoryView extends React.Component<IRepositoryProps, {}> {
         <UiView style={{left: 0,  bottom: 0, top: 0, borderRight: '1px solid #24292e', zIndex: 2, flex: 1}}>
           {this.renderChangesSidebar()}
         </UiView>
-        <UiView style={{ right: 0,  bottom: 0, top:70, zIndex: 1, borderTop: '1px solid #e1e4e8', flex: 1}}>
+        <UiView style={{ right: 0,  bottom: 0, marginTop:70, zIndex: 1, borderTop: '1px solid #e1e4e8', flex: 1}}>
           {this.renderHistorySidebar()}
         </UiView>
         </UiView>
