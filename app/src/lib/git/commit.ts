@@ -40,15 +40,9 @@ export async function createCommit(
     // Commit failures could come from a pre-commit hook rejection. So display
     // a bit more context than we otherwise would.
     if (e instanceof GitError) {
-      const output = e.result.stderr.trim()
-
-      let standardError = ''
-      if (output.length > 0) {
-        standardError = `, with output: '${output}'`
-      }
-      const exitCode = e.result.exitCode
+      let standardError = e.result.stderr.trim()
       const error = new Error(
-        `Commit failed - exit code ${exitCode} received${standardError}`
+        `${standardError}`
       )
       error.name = 'commit-failed'
       throw error
@@ -57,7 +51,8 @@ export async function createCommit(
     }
   }
 
-  const resultPull = await git([...gitNetworkArguments, 'pull', '--no-rebase', '-Xours', 'origin'], repository.path, 'pull', opts)
+  await git([...gitNetworkArguments, 'fetch', 'origin'], repository.path, 'fetch', opts)
+  const resultPull = await git([...gitNetworkArguments, 'merge', '-Xours', '-m Saved my changes on top of the previous revision', 'origin'], repository.path, 'merge', opts)
   if (resultPull.gitErrorDescription) {
     throw new GitError(resultPull, [...gitNetworkArguments, 'pull', '--no-rebase', '-Xours', 'origin'])
   }

@@ -54,6 +54,8 @@ function getResultMessage(result: IGitResult) {
   }
 
   if (result.stderr.length) {
+    if(result.stderr.indexOf('*** Please tell me who you are.') >= 0){
+      return `We could'nt find your name and email.\nMake sure you've filled in these details in the preferences. ${ __DARWIN__ ? 'preferences' : 'options' }` }
     return result.stderr
   } else if (result.stdout.length) {
     return result.stdout
@@ -73,8 +75,21 @@ export class GitError extends Error {
     super(getResultMessage(result))
 
     this.name = 'GitError'
-    this.result = result
+    if(result.stderr.indexOf('*** Please tell me who you are.') >= 0){
+      let stderr = `We couldn't find your name and email.\nMake sure you've filled in these details in the ${ __DARWIN__ ? 'preferences. \nWevolver Desktop -> Preferences...' : 'options.' }`
+      let newResult = {
+        "stderr": stderr,
+        "exitCode": 128,
+        "stdout": "Commit failed",
+        "gitError": null,
+        "gitErrorDescription": null,
+      }
+      this.result = newResult
+    } else {
+      this.result = result
+    }
     this.args = args
+    // log.error(JSON.stringify(this.result, Object.getOwnPropertyNames(this.result)))
   }
 }
 
@@ -130,7 +145,7 @@ export async function git(
   }
 
   const gitErrorDescription = gitError ? getDescriptionForError(gitError) : null
-  const gitResult = { ...result, gitError, gitErrorDescription }
+  let gitResult = { ...result, gitError, gitErrorDescription }
 
   let acceptableError = true
   if (gitError && opts.expectedErrors) {
@@ -150,6 +165,7 @@ export async function git(
   if (result.stdout) {
     errorMessage.push(result.stdout)
   }
+
 
   if (result.stderr) {
     errorMessage.push(result.stderr)
