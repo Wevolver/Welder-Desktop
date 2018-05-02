@@ -55,7 +55,7 @@ function getResultMessage(result: IGitResult) {
 
   if (result.stderr.length) {
     if(result.stderr.indexOf('*** Please tell me who you are.') >= 0){
-      return `We could'nt find your name and email.\nMake sure you've filled in these details in the preferences. ${ __DARWIN__ ? 'preferences' : 'options' }` }
+      return `We couldn't find your name and email.\nMake sure you've filled in these details in the ${ __DARWIN__ ? 'preferences. \nWevolver Desktop > Preferences...' : 'options. \nFile > Options' }` }
     return result.stderr
   } else if (result.stdout.length) {
     return result.stdout
@@ -76,7 +76,7 @@ export class GitError extends Error {
 
     this.name = 'GitError'
     if(result.stderr.indexOf('*** Please tell me who you are.') >= 0){
-      let stderr = `We couldn't find your name and email.\nMake sure you've filled in these details in the ${ __DARWIN__ ? 'preferences. \nWevolver Desktop -> Preferences...' : 'options.' }`
+      let stderr = `We couldn't find your name and email.\nMake sure you've filled in these details in the ${ __DARWIN__ ? 'preferences. \nWevolver Desktop > Preferences...' : 'options. \nFile > Options' }`
       let newResult = {
         "stderr": stderr,
         "exitCode": 128,
@@ -159,7 +159,7 @@ export async function git(
   // The caller should either handle this error, or expect that exit code.
   const errorMessage = []
   errorMessage.push(
-    `\`git ${args.join(' ')}\` exited with an unexpected code: ${exitCode}.`
+    `Wevolver ran into an error. You can reach out to the Wevolver support team and share the error message below for support\n\n\`git ${args.join(' ')}\` exited with an unexpected code: ${exitCode}.`
   )
 
   if (result.stdout) {
