@@ -1022,8 +1022,10 @@ export class Dispatcher {
         break
 
       case RetryActionType.PullPush:
-        await this.pull(retryAction.repository)
-        return this.push(retryAction.repository)
+        await this.commitIncludedChanges(retryAction.repository, retryAction.message, '')
+        break 
+        // await this.pull(retryAction.repository)
+        // return this.push(retryAction.repository)
 
       default:
         return assertNever(retryAction, `Unknown retry action: ${retryAction}`)

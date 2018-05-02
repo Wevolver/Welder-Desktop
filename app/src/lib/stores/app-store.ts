@@ -1392,10 +1392,6 @@ export class AppStore extends TypedBaseStore<IAppState> {
 
     const gitStore = this.getGitStore(repository)
 
-    const retryAction: RetryAction = {
-      type: RetryActionType.PullPush,
-      repository,
-    }
 
     const message = await formatCommitMessage(
       repository,
@@ -1404,6 +1400,12 @@ export class AppStore extends TypedBaseStore<IAppState> {
       trailers
     )
 
+    const retryAction: RetryAction = {
+      type: RetryActionType.PullPush,
+      repository,
+      message,
+    }
+
     const result = await this.isCommitting(repository, () => {
       return gitStore.performFailableOperation(() =>
         createCommit(repository, message, selectedFiles, account),
@@ -1411,6 +1413,22 @@ export class AppStore extends TypedBaseStore<IAppState> {
       )
     })
 
+    if(!result) {
+      await this._refreshRepository(repository)
+      await this.refreshChangesSection(repository, {
+        includingStatus: true,
+        clearPartialState: true,
+      })
+      const selectedState = this.getState().selectedState
+
+      if (selectedState && selectedState.type === SelectionType.Repository) {
+        const repoState = selectedState.state
+        const commits = repoState.commits.values()
+        const commit = commits.next().value
+        this._undoCommit(repository, commit)
+      }
+    }
+    
     if (result) {
       this.statsStore.recordCommit()
 
