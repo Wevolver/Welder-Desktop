@@ -98,7 +98,7 @@ export async function pull(
   }
 
   await git([...gitNetworkArguments, 'fetch', 'origin'], repository.path, 'fetch', opts)
-  const result= await git([...gitNetworkArguments, 'merge', '-Xtheirs', '-m Saved previous revision on top of my changes', 'origin'], repository.path, 'merge', opts)
+  const result= await git([...gitNetworkArguments, 'merge', '-Xtheirs', '-m Saved previous revision on top of local changes', 'origin'], repository.path, 'merge', opts)
 
   if (result.gitErrorDescription) {
     throw new GitError(result, args)

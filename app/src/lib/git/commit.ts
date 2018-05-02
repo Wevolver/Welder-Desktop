@@ -52,7 +52,7 @@ export async function createCommit(
   }
 
   await git([...gitNetworkArguments, 'fetch', 'origin'], repository.path, 'fetch', opts)
-  const resultPull = await git([...gitNetworkArguments, 'merge', '-Xours', '-m Saved my changes on top of the previous revision', 'origin'], repository.path, 'merge', opts)
+  const resultPull = await git([...gitNetworkArguments, 'merge', '-Xours', '-m Saved local changes on top of the previous revision', 'origin'], repository.path, 'merge', opts)
   if (resultPull.gitErrorDescription) {
     throw new GitError(resultPull, [...gitNetworkArguments, 'pull', '--no-rebase', '-Xours', 'origin'])
   }
