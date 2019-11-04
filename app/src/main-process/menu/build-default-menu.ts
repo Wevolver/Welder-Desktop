@@ -1,4 +1,4 @@
-import { Menu, ipcMain, shell } from 'electron'
+import { Menu, ipcMain } from 'electron'
 import { ensureItemIds } from './ensure-item-ids'
 import { MenuEvent } from './menu-event'
 import { getLogDirectoryPath } from '../../lib/logging/get-log-path'
@@ -69,7 +69,7 @@ export function buildDefaultMenu(
       separator,
       {
         id: 'view-repository-on-github',
-        label: __DARWIN__ ? 'View on Wevolver' : '&View on Wevolver',
+        label: __DARWIN__ ? 'View on Welder' : '&View on Welder',
         accelerator: 'CmdOrCtrl+Shift+G',
         click: emit('view-repository-on-github'),
       },
@@ -224,13 +224,6 @@ export function buildDefaultMenu(
     })
   }
 
-  const showUserGuides: Electron.MenuItemConstructorOptions = {
-    label: 'Show User Guides',
-    click() {
-      shell.openExternal('https://help.wevolver.com/')
-    },
-  }
-
   const showLogsLabel = __DARWIN__
     ? 'Show Logs in Finder'
     : __WIN32__ ? 'S&how logs in Explorer' : 'S&how logs in your File Manager'
@@ -250,7 +243,6 @@ export function buildDefaultMenu(
   }
 
   const helpItems = [
-    showUserGuides,
     showLogsItem,
   ]
 

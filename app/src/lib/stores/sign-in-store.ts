@@ -25,7 +25,7 @@ import { minimumSupportedEnterpriseVersion } from '../../lib/enterprise'
 import { TypedBaseStore } from './base-store'
 
 function getUnverifiedUserErrorMessage(login: string): string {
-  return `Unable to authenticate. The account ${login} is lacking a verified email address. Please sign in to Wevolver.com, confirm your email address in the Emails section under Personal settings, and try again.`
+  return `Unable to authenticate. The account ${login} is lacking a verified email address. Please sign in to Welder.com, confirm your email address in the Emails section under Personal settings, and try again.`
 }
 
 const EnterpriseTooOldMessage = `The Wevolver Enterprise version does not support Wevolver Desktop. Talk to your server's administrator about upgrading to the latest version of Wevolver Enterprise.`

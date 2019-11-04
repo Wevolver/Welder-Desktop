@@ -171,7 +171,7 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
 
   private getDescription(tipState: TipState): JSX.Element | string {
     if (!this.props.remoteName) {
-      return 'Publish this repository to Wevolver'
+      return 'Publish this repository to Welder'
     }
 
     if (tipState === TipState.Detached) {
@@ -185,7 +185,7 @@ export class PushPullButton extends React.Component<IPushPullButtonProps, {}> {
     if (!this.props.aheadBehind) {
       const isGitHub = !!this.props.repository.gitHubRepository
       return isGitHub
-        ? 'Publish this branch to Wevolver'
+        ? 'Publish this branch to Welder'
         : 'Publish this branch to the remote'
     }
 
