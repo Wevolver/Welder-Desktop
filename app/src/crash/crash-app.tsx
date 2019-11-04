@@ -42,7 +42,7 @@ const BottomImageUri = encodePathAsUrl(
   'static/welcome-illustration-left-bottom.svg'
 )
 
-const issuesUri = 'https://www.wevolver.com'
+const issuesUri = 'https://www.welder.com'
 
 /**
  * Formats an error by attempting to strip out user-identifiable information

@@ -21,7 +21,7 @@ export class BlankSlateView extends React.Component<IBlankSlateProps, {}> {
 
           <div className="callouts">
             <div className="callout">
-              <div>Clone an existing project from Wevolver to your computer</div>
+              <div>Clone an existing project from Welder to your computer</div>
               <Button onClick={this.props.onClone}>
                 {__DARWIN__ ? 'Clone a Project' : 'Clone a project'}
               </Button>
